@@ -14,10 +14,10 @@ class DetailPage extends StatelessWidget {
             // NOTE: thumbnail image
             Container(
               width: MediaQuery.of(context).size.width,
-              height: 296,
+              height: 300,
               child: Image.asset(
                 "assets/images/banner1.png",
-                height: 296,
+                height: 300,
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
               ),
@@ -26,7 +26,7 @@ class DetailPage extends StatelessWidget {
             ListView(
               children: [
                 SizedBox(
-                  height: 266,
+                  height: 250,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
@@ -183,7 +183,7 @@ class DetailPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30),
                   child: Text(
-                    "Luxury homes at affordable prices with Bandung's hilly atmosphere. Located in a strategic location, flood free.",
+                    "Luxury homes at affordable prices with Bandung's hilly atmosphere. Located in a strategic location, flood free.Luxury homes at affordable prices with Bandung's hilly atmosphere. Located in a strategic location, flood free.Luxury homes at affordable prices with Bandung's hilly atmosphere. Located in a strategic location, flood free.",
                     style: descText,
                   ),
                 ),
@@ -214,13 +214,52 @@ class DetailPage extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FloatingActionButton.extended(onPressed: () {  },
+            backgroundColor: purpleColor,
+            label: Text("Message"),
+            icon: Icon( Icons.map_sharp),
+          ),
+          FloatingActionButton.extended(onPressed: () {  },
+            backgroundColor: purpleColor,
+            label: Text("Call Me"),
+            icon: Icon( Icons.map_sharp),
+          ),
+        ],
+      ),
+      /*
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-        height: 80,
+        height: 90,
         color: whiteColor,
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            MaterialButton(
+              onPressed: () {},
+              color: purpleColor,
+              minWidth: 100,
+              height: 50,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(28),
+              ),
+              child: Text(
+                "Message",
+                style: TextStyle(
+                  color: whiteColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            Spacer(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -238,14 +277,14 @@ class DetailPage extends StatelessWidget {
             MaterialButton(
               onPressed: () {},
               color: purpleColor,
-              minWidth: 196,
+              minWidth: 100,
               height: 50,
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(28),
               ),
               child: Text(
-                "Book Now",
+                "Call",
                 style: TextStyle(
                   color: whiteColor,
                   fontSize: 16,
@@ -255,7 +294,7 @@ class DetailPage extends StatelessWidget {
             )
           ],
         ),
-      ),
+      ),*/
     );
   }
 }

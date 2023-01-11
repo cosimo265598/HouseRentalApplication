@@ -9,7 +9,7 @@ Color shadowColor = Color(0x26616161);
 
 // style
 TextStyle primaryTitle = TextStyle(
-  fontSize: 30,
+  fontSize: 25,
   fontWeight: FontWeight.w600,
   color: blackColor,
 );
@@ -82,7 +82,7 @@ InputDecoration searchDecoration = InputDecoration(
     borderRadius: BorderRadius.circular(28),
     borderSide: BorderSide.none,
   ),
-  hintText: "Find your dream home",
+  hintText: "Find your rent home",
   contentPadding: EdgeInsets.symmetric(
     horizontal: 20,
     vertical: 19,
@@ -98,10 +98,18 @@ InputDecoration searchDecoration = InputDecoration(
         borderRadius: BorderRadius.circular(100),
       ),
       child: Icon(
-        Icons.search,
+        Icons.display_settings_rounded,
         color: whiteColor,
         size: 16,
       ),
     ),
+  ),
+  prefixIcon: Padding(
+    padding: EdgeInsets.all(8),
+    child: Icon(
+        Icons.search_rounded,
+        color: purpleColor,
+        size: 18,
+      ),
   ),
 );
