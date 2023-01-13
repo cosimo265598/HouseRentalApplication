@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rent_house/screens/chat/chat_room.dart';
 import 'package:rent_house/theme.dart';
 
 class DetailPage extends StatelessWidget {
@@ -421,7 +422,9 @@ class DetailPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           FloatingActionButton.extended(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => ChatRoom()));
+            },
             backgroundColor: purpleColor,
             extendedIconLabelSpacing: 20,
             label: Text("Contact me"),

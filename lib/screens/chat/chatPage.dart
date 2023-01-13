@@ -5,14 +5,14 @@ import 'package:rent_house/theme.dart';
 import '../../models/chatUserModel.dart';
 import 'conversationList.dart';
 
-class ChatList extends StatefulWidget {
-  const ChatList({Key? key}) : super(key: key);
+class ChatPage extends StatefulWidget {
+  const ChatPage({Key? key}) : super(key: key);
 
   @override
-  State<ChatList> createState() => _ChatListState();
+  State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatListState extends State<ChatList> {
+class _ChatPageState extends State<ChatPage> {
   List<ChatUsers> chatUsers = [
     ChatUsers(name: "Jane Russel", messageText: "Awesome Setup", imageURL: "assets/images/owner1.png", time: "Now"),
     ChatUsers(name: "Glady's Murphy", messageText: "That's Great", imageURL: "assets/images/owner1.png", time: "Yesterday"),
@@ -24,6 +24,9 @@ class _ChatListState extends State<ChatList> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
+      appBar: AppBar(
+        backgroundColor: purpleColor.withOpacity(0.8),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -34,7 +37,7 @@ class _ChatListState extends State<ChatList> {
                 padding: EdgeInsets.only(top: 16),
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index){
-                  return ConversationList(
+                  return Conversation(
                       name: chatUsers[index].name,
                       messageText: chatUsers[index].messageText,
                       imageUrl: chatUsers[index].imageURL,

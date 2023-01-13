@@ -27,9 +27,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
             child: Text(
               "Your profile",
+              style: primaryTitle,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child :ListTile(
+              contentPadding: const EdgeInsets.all(1),
+              title: Text(
+                "Le tue informazioni personali",
+                style: secondaryTitle,
+              ),
+              subtitle: Text("Nome: Cosimo \nCognome Manisi\nLavoro : manco per un sogno", style: descText,),
+              trailing: CircleAvatar(
+                radius: 30,
+                backgroundImage: AssetImage("assets/images/owner1.png"),backgroundColor: Colors.transparent,),
+            ),
+
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: Text(
+              "I tuoi annunci",
               style: secondaryTitle,
             ),
           ),
+          AroundCard(
+            imageUrl: "assets/images/house1.png",
+            title: "Wooden House",
+            city: "Bandung",
+            rating: 4,
+          ),
+          SizedBox(height: 10),
+          AroundCard(
+            imageUrl: "assets/images/house2.png",
+            title: "Wooden House",
+            city: "Bogor",
+            rating: 5,
+          ),
+          SizedBox(height: 10),
+
           SizedBox(
             height: 60,
           ),

@@ -30,7 +30,7 @@ class _ChatRoomState extends State<ChatRoom> {
         appBar: AppBar(
           elevation: 0,
           automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
+          backgroundColor: purpleColor.withOpacity(0.8),
           flexibleSpace: SafeArea(
             child: Container(
               padding: EdgeInsets.only(right: 16),
@@ -90,14 +90,14 @@ class _ChatRoomState extends State<ChatRoom> {
             alignment: Alignment.bottomLeft,
             child: Container(
               decoration: BoxDecoration(
-                color: greyColor,
+                color: Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(28)
               ),
-              padding: EdgeInsets.only(left: 10,bottom: 10,top: 10),
+              padding: EdgeInsets.all(5),
               //height: 100,
               width: double.infinity,
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: 200, minHeight: 60),
+                constraints: BoxConstraints(maxHeight: 200, minHeight: 20),
                 child: Row(
                   children: <Widget>[
                     SizedBox(width: 15,),

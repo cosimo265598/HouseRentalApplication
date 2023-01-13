@@ -16,20 +16,18 @@ import '../widgets/filter_categories.dart';
 import '../widgets/slide_card.dart';
 
 class HomePage extends StatefulWidget {
-  const  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
   @override
   State<HomePage> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomePage> {
-
-  int currentIndex=1;
+  int currentIndex = 1;
   List<Widget> _pages = [
     HomeScreen(),
     SearchScreen(),
     BookmarkedScreen(),
     ProfileScreen(),
-
   ];
 
   @override
@@ -42,39 +40,69 @@ class _HomeScreenState extends State<HomePage> {
         child: TopBar(),
       ),
       body: SafeArea(
-          child:  ChatList(),//_pages[currentIndex],
+        child: _pages[currentIndex],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: currentIndex==1 ? FloatingActionButton.extended(onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => GoogleMapsScreen()));
-      },
-        backgroundColor: purpleColor,
-        label: Text("Map view"),
-        icon: Icon( Icons.map_sharp),
-        heroTag: "btn1",
-      ):null,
-      bottomNavigationBar:CurvedNavigationBar(
+      floatingActionButton: onSelectedIndexFloatingActionButton(currentIndex),
+      bottomNavigationBar: CurvedNavigationBar(
         buttonBackgroundColor: purpleColor,
         index: currentIndex,
         color: Colors.grey.shade200,
         animationDuration: Duration(milliseconds: 300),
         height: 60,
-          items: [
-            Icon(Icons.home_rounded,size: 20,),
-            Icon(Icons.search_rounded,size: 20,),
-            Icon(Icons.favorite_rounded,size: 20,),
-            Icon(Icons.account_circle_rounded,size: 20,),
-          ],
+        items: [
+          Icon(
+            Icons.home_rounded,
+            size: 20,
+          ),
+          Icon(
+            Icons.search_rounded,
+            size: 20,
+          ),
+          Icon(
+            Icons.favorite_rounded,
+            size: 20,
+          ),
+          Icon(
+            Icons.account_circle_rounded,
+            size: 20,
+          ),
+        ],
         backgroundColor: Colors.transparent,
-        onTap: (index){
+        onTap: (index) {
           setState(() {
-            currentIndex=index;
+            currentIndex = index;
           });
         },
       ),
     );
   }
+
+  Widget? onSelectedIndexFloatingActionButton(int index) {
+    if( index==1 ){
+      return FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (_) => GoogleMapsScreen()));
+        },
+        backgroundColor: purpleColor,
+        label: Text("Map view"),
+        icon: Icon(Icons.map_sharp),
+        heroTag: "btn1",
+      );
+    }
+    else if (index==3){
+      return FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (_) => ChatPage()));
+        },
+        backgroundColor: purpleColor,
+        label: Text("Le mie chat"),
+        icon: Icon(Icons.message_outlined),
+        heroTag: "btn1",
+      );
+    }
+    return null;
+  }
 }
-
-
-

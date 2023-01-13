@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:rent_house/screens/chat/chat_room.dart';
 
-class ConversationList extends StatefulWidget{
+class Conversation extends StatefulWidget{
   String name;
   String messageText;
   String imageUrl;
   String time;
   bool isMessageRead;
 
-  ConversationList({required this.name,required this.messageText,required this.imageUrl,required this.time,required this.isMessageRead});
+  Conversation({required this.name,required this.messageText,required this.imageUrl,required this.time,required this.isMessageRead});
   @override
-  _ConversationListState createState() => _ConversationListState();
+  _ConversationState createState() => _ConversationState();
 }
 
-class _ConversationListState extends State<ConversationList> {
+class _ConversationState extends State<Conversation> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
