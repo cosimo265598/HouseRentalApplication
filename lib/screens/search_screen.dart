@@ -8,13 +8,13 @@ import '../widgets/around_card.dart';
 import '../widgets/filter_categories.dart';
 import '../widgets/slide_card.dart';
 
-class HomeScreen extends StatefulWidget {
-  const  HomeScreen({Key? key}) : super(key: key);
+class SearchScreen extends StatefulWidget {
+  const  SearchScreen({Key? key}) : super(key: key);
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +22,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // NOTE: header
-          Padding(
-            padding: EdgeInsets.only(left: 30.0, top: 30.0),
-            child: Text(
-              "Find Your\nPerfect home!",
-              style: primaryTitle,
-            ),
-          ),
           // NOTE: search
           Container(
-            padding: EdgeInsets.all(20.0),
+            padding: EdgeInsets.all(10.0),
             child: Material(
               elevation: 6,
               shadowColor: shadowColor,
@@ -44,44 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           // NOTE: slider
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: Text(
-              "Recently added",
+              "What we found:",
               style: secondaryTitle,
             ),
           ),
-          Container(
-            height: 216,
-            child: ListView(
-              padding: EdgeInsets.only(bottom: 10),
-              scrollDirection: Axis.horizontal,
-              children: [
-                SizedBox(width: 30),
-                SliderCard(
-                  imageUrl: "assets/images/banner1.png",
-                  title: "Modern House",
-                  city: "Bandung",
-                  rating: 5,
-                ),
-                SizedBox(width: 30),
-                SliderCard(
-                  imageUrl: "assets/images/banner2.png",
-                  title: "White House",
-                  city: "Jakarta",
-                  rating: 4,
-                ),
-              ],
-            ),
-          ),
-          // NOTE: recommeded
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Text(
-              "Around To You",
-              style: secondaryTitle,
-            ),
-          ),
-          Categories(),
           AroundCard(
             imageUrl: "assets/images/house1.png",
             title: "Wooden House",
