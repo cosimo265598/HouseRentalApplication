@@ -1,7 +1,9 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:rent_house/screens/bookmarked_screen.dart';
+import 'package:rent_house/screens/chat/chatPage.dart';
 import 'package:rent_house/screens/detail_page.dart';
+import 'package:rent_house/screens/google_maps_search_screen.dart';
 import 'package:rent_house/screens/home_page_screen.dart';
 import 'package:rent_house/screens/profile_screen.dart';
 import 'package:rent_house/screens/search_screen.dart';
@@ -40,10 +42,12 @@ class _HomeScreenState extends State<HomePage> {
         child: TopBar(),
       ),
       body: SafeArea(
-          child:  _pages[currentIndex],
+          child:  ChatList(),//_pages[currentIndex],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: currentIndex==1? FloatingActionButton.extended(onPressed: () {  },
+      floatingActionButton: currentIndex==1 ? FloatingActionButton.extended(onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => GoogleMapsScreen()));
+      },
         backgroundColor: purpleColor,
         label: Text("Map view"),
         icon: Icon( Icons.map_sharp),

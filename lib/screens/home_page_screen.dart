@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: primaryTitle,
             ),
           ),
-                   // NOTE: slider
+          // NOTE: slider
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(

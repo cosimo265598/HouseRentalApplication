@@ -31,7 +31,7 @@ class _SearchScreenState extends State<SearchScreen> {
               child: TextField(
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: whiteColor,
+                  fillColor: greyColor.withOpacity(0.2),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(28),
                     borderSide: BorderSide.none,

@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class HomePage extends StatefulWidget {
+import '../theme.dart';
+
+class GoogleMapsScreen extends StatefulWidget {
   @override
-  HomePageState createState() => HomePageState();
+  GoogleMapsScreenState createState() => GoogleMapsScreenState();
 }
 
-class HomePageState extends State<HomePage> {
+class GoogleMapsScreenState extends State<GoogleMapsScreen> {
   Completer<GoogleMapController> _controller = Completer();
 
   @override
@@ -19,28 +21,39 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(FontAwesomeIcons.arrowLeft),
-            onPressed: () {
-              //
-            }),
-        title: Text("New York"),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(FontAwesomeIcons.search),
-              onPressed: () {
-                //
-              }),
-        ],
+      body: SafeArea(
+        child: Stack(
+          children: [
+            _arrowBack(context),
+            _buildGoogleMap(context),
+            //_zoomminusfunction(),
+            //_zoomplusfunction(),
+            _buildContainer(),
+          ],
+        ),
       ),
-      body: Stack(
-        children: <Widget>[
-          _buildGoogleMap(context),
-          _zoomminusfunction(),
-          _zoomplusfunction(),
-          _buildContainer(),
-        ],
+    );
+  }
+
+  Widget _arrowBack(context){
+    return Positioned(
+      top: 20,
+      left: 20,
+      child: MaterialButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        minWidth: 30,
+        height: 30,
+        padding: EdgeInsets.all(5),
+        color: whiteColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100),
+        ),
+        child: Icon(
+          Icons.arrow_back_ios_outlined,
+          size: 14,
+        ),
       ),
     );
   }
@@ -93,7 +106,7 @@ class HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: _boxes(
-                  "https://lh5.googleusercontent.com/p/AF1QipO3VPL9m-b355xWeg4MXmOQTauFAEkavSluTtJU=w225-h160-k-no",
+                  "https://lh5.googleusercontent.com/p/AF1QipMKRN-1zTYMUVPrH-CcKzfTo6Nai7wdL7D8PMkt=w340-h160-k-no",
                   40.738380, -73.988426,"Gramercy Tavern"),
             ),
             SizedBox(width: 10.0),
