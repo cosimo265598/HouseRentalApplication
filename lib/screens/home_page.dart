@@ -22,35 +22,36 @@ class HomePage extends StatefulWidget {
 class _HomeScreenState extends State<HomePage> {
 
   int currentIndex=1;
-  List<Widget> pages = [
+  List<Widget> _pages = [
     HomeScreen(),
     SearchScreen(),
-    BookmarkedScreen(), // add transaction pages
-    ProfileScreen(),// statistics
-    //Settings(),// settings
+    BookmarkedScreen(),
+    ProfileScreen(),
+
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: whiteColor,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
         child: TopBar(),
       ),
       body: SafeArea(
-          child:  HomeScreen(),
+          child:  _pages[currentIndex],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(onPressed: () {  },
+      floatingActionButton: currentIndex==1? FloatingActionButton.extended(onPressed: () {  },
         backgroundColor: purpleColor,
         label: Text("Map view"),
         icon: Icon( Icons.map_sharp),
         heroTag: "btn1",
-      ),
+      ):null,
       bottomNavigationBar:CurvedNavigationBar(
         buttonBackgroundColor: purpleColor,
+        index: currentIndex,
         color: Colors.grey.shade200,
         animationDuration: Duration(milliseconds: 300),
         height: 60,
@@ -61,6 +62,11 @@ class _HomeScreenState extends State<HomePage> {
             Icon(Icons.account_circle_rounded,size: 20,),
           ],
         backgroundColor: Colors.transparent,
+        onTap: (index){
+          setState(() {
+            currentIndex=index;
+          });
+        },
       ),
     );
   }

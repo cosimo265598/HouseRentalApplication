@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rent_house/screens/detail_page.dart';
+import 'package:rent_house/screens/search_screen.dart';
 import 'package:rent_house/theme.dart';
 import 'package:rent_house/widgets/bottom_nav_bar.dart';
 import 'package:rent_house/widgets/top_bar.dart';
@@ -9,7 +10,8 @@ import '../widgets/filter_categories.dart';
 import '../widgets/slide_card.dart';
 
 class HomeScreen extends StatefulWidget {
-  const  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key }) : super(key: key);
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -26,23 +28,11 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: EdgeInsets.only(left: 30.0, top: 30.0),
             child: Text(
-              "Find Your\nPerfect home!",
+              "Find Your\n\t\t\t\tPerfect home!",
               style: primaryTitle,
             ),
           ),
-          // NOTE: search
-          Container(
-            padding: EdgeInsets.all(20.0),
-            child: Material(
-              elevation: 6,
-              shadowColor: shadowColor,
-              borderRadius: BorderRadius.circular(28),
-              child: TextField(
-                decoration: searchDecoration,
-              ),
-            ),
-          ),
-          // NOTE: slider
+                   // NOTE: slider
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(

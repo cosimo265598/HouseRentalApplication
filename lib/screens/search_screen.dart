@@ -9,13 +9,12 @@ import '../widgets/filter_categories.dart';
 import '../widgets/slide_card.dart';
 
 class SearchScreen extends StatefulWidget {
-  const  SearchScreen({Key? key}) : super(key: key);
+  const SearchScreen({Key? key}) : super(key: key);
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -30,7 +29,48 @@ class _SearchScreenState extends State<SearchScreen> {
               shadowColor: shadowColor,
               borderRadius: BorderRadius.circular(28),
               child: TextField(
-                decoration: searchDecoration,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: whiteColor,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(28),
+                    borderSide: BorderSide.none,
+                  ),
+                  hintText: "Find your rent home",
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 19,
+                  ),
+                  suffixIcon: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: MaterialButton(
+                      onPressed: () => showModalBottomSheet(
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          context: context,
+                          builder: (context) => _buildModalSheet()),
+                      color: purpleColor,
+                      minWidth: 39,
+                      height: 39,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: Icon(
+                        Icons.display_settings_rounded,
+                        color: whiteColor,
+                        size: 16,
+                      ),
+                    ),
+                  ),
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Icon(
+                      Icons.search_rounded,
+                      color: purpleColor,
+                      size: 18,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -83,4 +123,70 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
+
+  Widget _buildModalSheet() => DraggableScrollableSheet(
+        initialChildSize: 0.4,
+        minChildSize: 0.3,
+        maxChildSize: 0.9,
+        builder: (BuildContext context, ScrollController scrollController) =>
+            Padding(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Container(
+          decoration: BoxDecoration(
+                color: whiteColor,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
+          child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                controller: scrollController,
+                children: [
+                  _buildFilterSearch(Icons.add, "Search on"),
+                  _buildFilterSearch(Icons.price_check, "Price"),
+                  _buildFilterSearch(Icons.work_outlined, "Worker"),
+                  _buildFilterSearch(Icons.map, "Hello man"),
+                  MaterialButton(
+
+                    color: purpleColor,
+                    minWidth: 39,
+                    height: 50,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    onPressed: () {  },
+                    child: Icon(
+                      Icons.done_rounded,
+                      color: whiteColor,
+                      size: 25,
+                    ),
+                  ),
+                ],
+              ),
+          ),
+        ),
+            ),
+      );
+
+  Widget _buildFilterSearch (IconData icon, String hint) => TextField(
+    decoration: InputDecoration(
+      filled: true,
+      fillColor: whiteColor,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(28),
+        borderSide: BorderSide.none,
+      ),
+      hintText: "Find your rent home",
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 19,
+      ),
+      prefixIcon: Padding(
+        padding: EdgeInsets.all(8),
+        child: Icon(
+          icon,
+          color: purpleColor,
+          size: 18,
+        ),
+      ),
+    ),
+  );
 }
