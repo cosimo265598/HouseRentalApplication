@@ -3,6 +3,7 @@ import 'package:rent_house/screens/detail_page.dart';
 import 'package:rent_house/theme.dart';
 import 'package:rent_house/widgets/bottom_nav_bar.dart';
 import 'package:rent_house/widgets/top_bar.dart';
+import 'package:rent_house/widgets/your_rent_card.dart';
 
 import '../widgets/around_card.dart';
 import '../widgets/filter_categories.dart';
@@ -57,14 +58,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: secondaryTitle,
             ),
           ),
-          AroundCard(
+          RentHouse(
             imageUrl: "assets/images/house1.png",
             title: "Wooden House",
             city: "Bandung",
             rating: 4,
           ),
           SizedBox(height: 10),
-          AroundCard(
+          RentHouse(
             imageUrl: "assets/images/house2.png",
             title: "Wooden House",
             city: "Bogor",

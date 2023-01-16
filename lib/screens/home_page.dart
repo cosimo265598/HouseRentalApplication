@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rent_house/screens/bookmarked_screen.dart';
 import 'package:rent_house/screens/chat/chatPage.dart';
 import 'package:rent_house/screens/detail_page.dart';
@@ -51,22 +52,10 @@ class _HomeScreenState extends State<HomePage> {
         animationDuration: Duration(milliseconds: 300),
         height: 60,
         items: [
-          Icon(
-            Icons.home_rounded,
-            size: 20,
-          ),
-          Icon(
-            Icons.search_rounded,
-            size: 20,
-          ),
-          Icon(
-            Icons.favorite_rounded,
-            size: 20,
-          ),
-          Icon(
-            Icons.account_circle_rounded,
-            size: 20,
-          ),
+          FaIcon(FontAwesomeIcons.home,),
+          FaIcon(FontAwesomeIcons.search,),
+          FaIcon(FontAwesomeIcons.heartCircleCheck,),
+          FaIcon(FontAwesomeIcons.solidCircleUser,)
         ],
         backgroundColor: Colors.transparent,
         onTap: (index) {

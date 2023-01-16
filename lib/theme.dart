@@ -6,6 +6,8 @@ Color greyColor = Color(0xffAFAFAF);
 Color orangeColor = Color(0xffE76D81);
 Color whiteColor = Color(0xffFFFFFF);
 Color shadowColor = Color(0x26616161);
+Color redColor = Color(0xa6fa374e);
+
 
 // style
 TextStyle primaryTitle = TextStyle(

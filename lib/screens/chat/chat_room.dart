@@ -44,7 +44,7 @@ class _ChatRoomState extends State<ChatRoom> {
                   ),
                   SizedBox(width: 2,),
                   CircleAvatar(
-                    backgroundImage: NetworkImage("<https://randomuser.me/api/portraits/men/5.jpg>"),
+                    backgroundImage: AssetImage("assets/images/owner1.png"),
                     maxRadius: 20,
                   ),
                   SizedBox(width: 12,),
@@ -63,28 +63,34 @@ class _ChatRoomState extends State<ChatRoom> {
             ),
           ),
         ),
-      body: Stack(
-        children: <Widget>[
-          ListView.builder(
-            itemCount: messages.length,
-            shrinkWrap: true,
-            padding: EdgeInsets.only(top: 10,bottom: 10),
-            itemBuilder: (context, index){
-              return Container(
-                padding: EdgeInsets.only(left: 14,right: 14,top: 10,bottom: 10),
-                child: Align(
-                  alignment: (messages[index].messageType == "receiver"?Alignment.topLeft:Alignment.topRight),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: (messages[index].messageType  == "receiver"?purpleColor.withOpacity(0.3):purpleColor.withOpacity(0.8)),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              reverse: true,
+              child: ListView.builder(
+                itemCount: messages.length,
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                padding: EdgeInsets.only(top: 10,bottom: 10),
+                itemBuilder: (context, index){
+                  return Container(
+                    padding: EdgeInsets.only(left: 14,right: 14,top: 10,bottom: 10),
+                    child: Align(
+                      alignment: (messages[index].messageType == "receiver"?Alignment.topLeft:Alignment.topRight),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: (messages[index].messageType  == "receiver"?purpleColor.withOpacity(0.3):purpleColor.withOpacity(0.8)),
+                        ),
+                        padding: EdgeInsets.all(16),
+                        child: Text(messages[index].messageContent, style: TextStyle(fontSize: 15),),
+                      ),
                     ),
-                    padding: EdgeInsets.all(16),
-                    child: Text(messages[index].messageContent, style: TextStyle(fontSize: 15),),
-                  ),
-                ),
-              );
-            },
+                  );
+                },
+              ),
+            ),
           ),
           Align(
             alignment: Alignment.bottomLeft,
