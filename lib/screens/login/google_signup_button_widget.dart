@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:rent_house/screens/home_page.dart';
+
+import 'google_sign_in.dart';
 
 
 class GoogleSignupButtonWidget extends StatelessWidget {
@@ -25,7 +28,8 @@ class GoogleSignupButtonWidget extends StatelessWidget {
             shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
           ),
           onPressed: () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+            final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+            provider.login();
           },
         ),
       );

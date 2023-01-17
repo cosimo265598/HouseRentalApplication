@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "869947268783",
+    "project_id": "house-rent-f250f",
+    "storage_bucket": "house-rent-f250f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:869947268783:android:019fbc956e01767089fe5a",
+        "android_client_info": {
+          "package_name": "com.example.house_rent_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "869947268783-g5cnpgbbghku99n9qhe8stkr2kjl0f7k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAer1_Lbbm_FcKkrzwpR1vo1hBFP4XiycM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "869947268783-g5cnpgbbghku99n9qhe8stkr2kjl0f7k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

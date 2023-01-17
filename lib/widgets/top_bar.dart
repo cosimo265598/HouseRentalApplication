@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 
 class TopBar extends StatefulWidget {
-  const TopBar({Key? key}) : super(key: key);
+  final String imageUser;
+  TopBar({Key? key, required this.imageUser}) : super(key: key);
 
   @override
   State<TopBar> createState() => _TopBarState();
@@ -39,7 +40,7 @@ class _TopBarState extends State<TopBar> {
                   bottomLeft: Radius.circular(38.0),
                   bottomRight: Radius.circular(38.0),
                 )),
-            child: CircleAvatar(backgroundImage: AssetImage('assets/images/owner1.png')),
+            child: CircleAvatar(backgroundImage: NetworkImage(this.widget.imageUser)),
           ),
         )
       ],

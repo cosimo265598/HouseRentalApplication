@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:rent_house/screens/detail_page.dart';
 import 'package:rent_house/theme.dart';
 import 'package:rent_house/widgets/bottom_nav_bar.dart';
@@ -8,6 +11,7 @@ import 'package:rent_house/widgets/your_rent_card.dart';
 import '../widgets/around_card.dart';
 import '../widgets/filter_categories.dart';
 import '../widgets/slide_card.dart';
+import 'login/google_sign_in.dart';
 
 class ProfileScreen extends StatefulWidget {
   const  ProfileScreen({Key? key}) : super(key: key);
@@ -16,6 +20,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final currentUser= FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +46,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 "Le tue informazioni personali",
                 style: secondaryTitle,
               ),
-              subtitle: Text("Nome: Cosimo \nCognome Manisi\nLavoro : manco per un sogno", style: descText,),
+              subtitle: Text(currentUser.displayName.toString()+"\nEmail: "+currentUser.email.toString(), style: descText,),
               trailing: CircleAvatar(
                 radius: 30,
-                backgroundImage: AssetImage("assets/images/owner1.png"),backgroundColor: Colors.transparent,),
+                backgroundImage: NetworkImage(currentUser.photoURL!),backgroundColor: Colors.transparent,),
             ),
 
           ),
           SizedBox(
             height: 10,
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60.0),
+            child: Container(
+              padding: EdgeInsets.all(4),
+              child: OutlinedButton(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    FaIcon(FontAwesomeIcons.userAltSlash, color: Colors.red),
+                    Text(
+                      'Log-out',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: purpleColor),
+                    ),
+                  ],
+                ),
+                style: ButtonStyle(
+                  minimumSize: MaterialStateProperty.resolveWith((states) => const Size.fromHeight(55.0)),
+                  //maximumSize: MaterialStateProperty.resolveWith((states) => const Size(280,55.0)),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
+                ),
+                onPressed: () {
+                  //logout account
+                  final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+                  provider.logout();
+                },
+              ),
+            ),
+          ),
+          SizedBox(height: 10,),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: Text(

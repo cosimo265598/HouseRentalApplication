@@ -34,8 +34,6 @@ class SignUpWidget extends StatelessWidget {
           ),
           Spacer(),
           GoogleSignupButtonWidget(),
-          SizedBox(height: 12),
-          FacebookSignupButtonWidget(),
           SizedBox(height: 20),
           Text(
             'Login to continue',

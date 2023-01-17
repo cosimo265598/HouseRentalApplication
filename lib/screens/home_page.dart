@@ -1,4 +1,5 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rent_house/screens/bookmarked_screen.dart';
@@ -23,6 +24,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomePage> {
+  final currentUser= FirebaseAuth.instance.currentUser!;
+
   int currentIndex = 1;
   List<Widget> _pages = [
     HomeScreen(),
@@ -38,7 +41,7 @@ class _HomeScreenState extends State<HomePage> {
       backgroundColor: whiteColor,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
-        child: TopBar(),
+        child: TopBar(imageUser: currentUser.photoURL!,),
       ),
       body: SafeArea(
         child: _pages[currentIndex],

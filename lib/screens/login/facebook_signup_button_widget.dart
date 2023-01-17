@@ -15,7 +15,7 @@ class FacebookSignupButtonWidget extends StatelessWidget {
             children: [
               FaIcon(FontAwesomeIcons.facebookF, color: Colors.blue),
               Text(
-                'Sign In With Google',
+                'Sign In With Facebook',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ],
