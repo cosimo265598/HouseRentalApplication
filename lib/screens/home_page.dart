@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rent_house/models/houseModel.dart';
 import 'package:rent_house/screens/bookmarked_screen.dart';
 import 'package:rent_house/screens/chat/chatPage.dart';
 import 'package:rent_house/screens/detail_page.dart';
@@ -24,7 +26,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomePage> {
-  final currentUser= FirebaseAuth.instance.currentUser!;
+  final currentUser = FirebaseAuth.instance.currentUser!;
+  //final String doc = FirebaseFirestore.instance.collection("Houses").snapshots().first.toString();
 
   int currentIndex = 1;
   List<Widget> _pages = [
@@ -41,11 +44,29 @@ class _HomeScreenState extends State<HomePage> {
       backgroundColor: whiteColor,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
-        child: TopBar(imageUser: currentUser.photoURL!,),
+        child: TopBar(
+          imageUser: currentUser.photoURL!,
+        ),
       ),
       body: SafeArea(
-        child: _pages[currentIndex],
-      ),
+          child:
+              readHouse() /*StreamBuilder<List<House>>(
+        stream: readHouse(),
+        builder: (BuildContext context, snapshot) {
+          if (snapshot.hasError)
+            return Text("Error");
+          else if (snapshot.hasData) {
+            final house = snapshot.data;
+            return ListView(
+              children: house!.map(buildExample).toList(),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ) ,*/ //
+          //_pages[currentIndex],
+          ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: onSelectedIndexFloatingActionButton(currentIndex),
       bottomNavigationBar: CurvedNavigationBar(
@@ -55,10 +76,18 @@ class _HomeScreenState extends State<HomePage> {
         animationDuration: Duration(milliseconds: 300),
         height: 60,
         items: [
-          FaIcon(FontAwesomeIcons.home,),
-          FaIcon(FontAwesomeIcons.search,),
-          FaIcon(FontAwesomeIcons.heartCircleCheck,),
-          FaIcon(FontAwesomeIcons.solidCircleUser,)
+          FaIcon(
+            FontAwesomeIcons.home,
+          ),
+          FaIcon(
+            FontAwesomeIcons.search,
+          ),
+          FaIcon(
+            FontAwesomeIcons.heartCircleCheck,
+          ),
+          FaIcon(
+            FontAwesomeIcons.solidCircleUser,
+          )
         ],
         backgroundColor: Colors.transparent,
         onTap: (index) {
@@ -71,23 +100,22 @@ class _HomeScreenState extends State<HomePage> {
   }
 
   Widget? onSelectedIndexFloatingActionButton(int index) {
-    if( index==1 ){
+    if (index == 1) {
       return FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => GoogleMapsScreen()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (_) => GoogleMapsScreen()));
         },
         backgroundColor: purpleColor,
         label: Text("Map view"),
         icon: Icon(Icons.map_sharp),
         heroTag: "btn1",
       );
-    }
-    else if (index==3){
+    } else if (index == 3) {
       return FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => ChatPage()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (_) => ChatPage()));
         },
         backgroundColor: purpleColor,
         label: Text("Le mie chat"),
@@ -97,4 +125,19 @@ class _HomeScreenState extends State<HomePage> {
     }
     return null;
   }
+
+  Widget readHouse() {
+    FirebaseFirestore.instance.collection('Houses').snapshots().map((snap) =>
+        snap.docs.map((e) {
+          print(e.data().values);
+          return e.data();
+        } )
+    );
+    return Container();
+  }
+
+  Widget buildExample(House h) => ListTile(
+        title: Text(h.titolo),
+        subtitle: Text(h.description),
+      );
 }
