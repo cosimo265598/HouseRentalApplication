@@ -1,51 +1,87 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class House {
   String idDocument;
   String titolo;
-  Map<String, double> houseComponent;
-  Map<String, bool> rentTo;
+  Map<String, int> houseComponent ;
+  Map<String, bool> rentTo ;
   DateTime pubDate;
   double prezzo;
   GeoPoint posizione;
   String address;
-  List<String> photo;
+  List<String> photos;
   String description;
   String agentId;
+  String city;
 
   Map<String, dynamic> toJson() {
     return {
-      "idDocument": idDocument,
-      "titolo": titolo,
-      "component": houseComponent,
-      "renTo": rentTo,
-      "pubDate": pubDate,
-      "prezzo": prezzo,
-      "posizione": posizione,
-      "adress": address,
-      "photo": photo,
-      "description": description,
-      "agendId": agentId
+      'idDocument': idDocument,
+      'titolo': titolo,
+      'component': houseComponent,
+      'renTo': rentTo,
+      'pubDate': pubDate,
+      'prezzo': prezzo,
+      'posizione': posizione,
+      'address': address,
+      'photos': photos,
+      'description': description,
+      'agendId': agentId,
+      'city' : city,
     };
   }
 
   static House fromJson(Map<String, dynamic> json) {
-    print( json['agendId'] );
-    return House(json['idDocument'], json['titolo'], json['component'], json['rentTo'], (json['pubDate'] as Timestamp).toDate(),
-        json['prezzo'], (json['posizione'] as GeoPoint), json['adress'], json['photos'], json['description'], json['agendId']);
+    return House(
+      idDocument: json['idDocument'] ,
+      titolo: json['titolo'],
+      houseComponent: Map.from(json['component']),
+      rentTo: Map.from(json['rentTo']),
+      pubDate: (json['pubDate'] as Timestamp).toDate(),
+      prezzo: double.parse(json['prezzo'].toString()),
+      posizione: (json['posizione'] as GeoPoint),
+      address: json['address'],
+      photos: List.from(json['photos']),
+      description: json['description'],
+      agentId: json['agendId'],
+      city: json['city'],
+    );
   }
 
-  House(
-      this.idDocument,
-      this.titolo,
-      this.houseComponent,
-      this.rentTo,
-      this.pubDate,
-      this.prezzo,
-      this.posizione,
-      this.address,
-      this.photo,
-      this.description,
-      this.agentId);
+  static Map<String,int> fromJsonHouseComponent(Map<String, dynamic> jsonC){
+    Map<String,int> map = {
+    'bathroom' : jsonC['bathroom'],
+    'bedroom' :jsonC['bedroom'] ,
+    'kitchen': jsonC['kitchen'] ,
+    };
+    return map;
+  }
+
+  static Map<String,bool> fromJsonRentTo(Map<String, dynamic> jsonR){
+    Map<String,bool> map = {
+      'student' : jsonR['student'],
+      'worker' :jsonR['worker'] ,
+      'family': jsonR['family'] ,
+    };
+    return map;
+  }
+
+  House({
+      required this.idDocument,
+      required this.titolo,
+      required this.houseComponent,
+      required this.rentTo,
+      required this.pubDate,
+      required this.prezzo,
+      required this.posizione,
+      required this.address,
+      required this.photos,
+      required this.description,
+      required this.agentId,
+      required this.city,
+  });
 }

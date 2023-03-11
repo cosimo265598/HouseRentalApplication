@@ -27,8 +27,6 @@ class HomePage extends StatefulWidget {
 
 class _HomeScreenState extends State<HomePage> {
   final currentUser = FirebaseAuth.instance.currentUser!;
-  //final String doc = FirebaseFirestore.instance.collection("Houses").snapshots().first.toString();
-
   int currentIndex = 1;
   List<Widget> _pages = [
     HomeScreen(),
@@ -49,23 +47,7 @@ class _HomeScreenState extends State<HomePage> {
         ),
       ),
       body: SafeArea(
-          child:
-              readHouse() /*StreamBuilder<List<House>>(
-        stream: readHouse(),
-        builder: (BuildContext context, snapshot) {
-          if (snapshot.hasError)
-            return Text("Error");
-          else if (snapshot.hasData) {
-            final house = snapshot.data;
-            return ListView(
-              children: house!.map(buildExample).toList(),
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
-      ) ,*/ //
-          //_pages[currentIndex],
+          child: _pages[currentIndex],
           ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: onSelectedIndexFloatingActionButton(currentIndex),
@@ -126,15 +108,9 @@ class _HomeScreenState extends State<HomePage> {
     return null;
   }
 
-  Widget readHouse() {
+  Stream<List<House>> readHouse() =>
     FirebaseFirestore.instance.collection('Houses').snapshots().map((snap) =>
-        snap.docs.map((e) {
-          print(e.data().values);
-          return e.data();
-        } )
-    );
-    return Container();
-  }
+        snap.docs.map((doc)=> House.fromJson(doc.data()) ).toList());
 
   Widget buildExample(House h) => ListTile(
         title: Text(h.titolo),

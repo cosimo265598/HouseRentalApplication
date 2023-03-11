@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../models/houseModel.dart';
 import '../screens/detail_page.dart';
 import '../theme.dart';
 
 class SliderCard extends StatelessWidget {
+  final House house;
   final String imageUrl;
   final String title;
   final String city;
@@ -14,6 +16,7 @@ class SliderCard extends StatelessWidget {
     required this.title,
     required this.city,
     required this.rating,
+    required this.house,
   });
 
   @override

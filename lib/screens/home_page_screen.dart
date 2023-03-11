@@ -4,11 +4,16 @@ import 'package:rent_house/screens/search_screen.dart';
 import 'package:rent_house/theme.dart';
 import 'package:rent_house/widgets/bottom_nav_bar.dart';
 import 'package:rent_house/widgets/top_bar.dart';
-
+import 'package:rent_house/models/houseModel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/around_card.dart';
 import '../widgets/filter_categories.dart';
 import '../widgets/slide_card.dart';
 
+
+const int RECENT = 90;
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key }) : super(key: key);
 
@@ -42,7 +47,25 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Container(
             height: 216,
-            child: ListView(
+            child: StreamBuilder<List<House>>(
+              stream: readHouse(),
+              builder: (BuildContext context, snapshot) {
+                if (snapshot.hasError)
+                  return Text("Error conncetion to DB");
+                else if (snapshot.hasData) {
+                  final house = snapshot.data;
+                  //replicateData();
+                  return ListView(
+                    padding: EdgeInsets.only(bottom: 10),
+                    scrollDirection: Axis.horizontal,
+                    children: house!.map(buildExample).toList(),
+                  );
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
+            )
+            /*ListView(
               padding: EdgeInsets.only(bottom: 10),
               scrollDirection: Axis.horizontal,
               children: [
@@ -61,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   rating: 4,
                 ),
               ],
-            ),
+            ),*/
           ),
           // NOTE: recommeded
           Padding(
@@ -72,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Categories(),
+          // puoi sostituirlo conun for
           AroundCard(
             imageUrl: "assets/images/house1.png",
             title: "Wooden House",
@@ -113,4 +137,24 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  Stream<List<House>> readHouse() =>
+      FirebaseFirestore.instance.collection('Houses').snapshots().map((snap) =>
+          snap.docs.map((doc)=> House.fromJson(doc.data()) ).where((element) =>
+              DateTime.now().subtract(const Duration(days: RECENT)).isBefore(element.pubDate))
+              .toList());
+
+  Widget buildExample(House h) => Row(
+    children: [
+    SizedBox(width: 30),
+    SliderCard(
+      imageUrl: "assets/images/banner1.png",
+      title: h.titolo,
+      city: h.city,
+      rating: 4,
+      house: h,
+    )]
+  );
+
+
 }

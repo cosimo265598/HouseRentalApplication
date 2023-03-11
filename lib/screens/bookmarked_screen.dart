@@ -36,30 +36,6 @@ class _BookmarkedScreenState extends State<BookmarkedScreen> {
             city: "Bandung",
             rating: 4,
           ),
-          AroundCard(
-            imageUrl: "assets/images/house2.png",
-            title: "Wooden House",
-            city: "Bogor",
-            rating: 5,
-          ),
-          AroundCard(
-            imageUrl: "assets/images/house3.png",
-            title: "Hill House",
-            city: "Makasar",
-            rating: 3,
-          ),
-          AroundCard(
-            imageUrl: "assets/images/house2.png",
-            title: "Wooden House",
-            city: "Bogor",
-            rating: 5,
-          ),
-          AroundCard(
-            imageUrl: "assets/images/house3.png",
-            title: "Hill House",
-            city: "Makasar",
-            rating: 3,
-          ),
           SizedBox(
             height: 60,
           ),

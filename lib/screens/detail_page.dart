@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:rent_house/screens/chat/chat_room.dart';
 import 'package:rent_house/theme.dart';
 
+import '../models/houseModel.dart';
+
 class DetailPage extends StatelessWidget {
+
   const DetailPage({Key? key}) : super(key: key);
 
   @override
