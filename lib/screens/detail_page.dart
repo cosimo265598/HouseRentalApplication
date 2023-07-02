@@ -426,7 +426,7 @@ class DetailPage extends StatelessWidget {
         children: [
           FloatingActionButton.extended(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => ChatRoom()));
+              Navigator.push(context, MaterialPageRoute(builder: (_) => ChatRoom(idChatRoom: 'mb',photoUrl: "", displayName: "",)));
             },
             backgroundColor: purpleColor,
             extendedIconLabelSpacing: 20,

@@ -13,7 +13,7 @@ import '../widgets/filter_categories.dart';
 import '../widgets/slide_card.dart';
 
 
-const int RECENT = 90;
+const int RECENT = 390;
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key }) : super(key: key);
 
@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: EdgeInsets.only(left: 30.0, top: 30.0),
             child: Text(
-              "Find Your\n\t\t\t\tPerfect home!",
+              "Find Your\n\t\t\t\trental home!",
               style: primaryTitle,
             ),
           ),

@@ -13,10 +13,11 @@ import 'models/houseModel.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  replicateData();
+  //replicateData();
   runApp(MyApp());
 }
 
+/*
 Future<void> replicateData () async {
   var collection = FirebaseFirestore.instance.collection('Houses');
   var docSnapshot = await collection.doc('0OsJF5kU5RrBTwFvnlaF').get();
@@ -31,7 +32,7 @@ Future<void> replicateData () async {
     newDoc.set(data!);
     // Call setState if needed.
   }
-}
+}*/
 
 class MyApp extends StatelessWidget {
   const MyApp({ Key? key }) : super(key: key);

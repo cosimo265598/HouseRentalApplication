@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -19,6 +20,7 @@ class LoginPage extends StatelessWidget {
             if (provider.isSigningIn) {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasData) {
+              checkUser();
               return HomePage();
             } else if (snapshot.hasError) {
               return Center(child: Text("Error connection!",style: primaryTitle,));
@@ -31,4 +33,21 @@ class LoginPage extends StatelessWidget {
 
   );
 
+  void checkUser(){
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    FirebaseFirestore.instance.collection('Users').snapshots().map((snap) =>
+        snap.docs.map((doc) => doc.id == _auth.currentUser!.uid)).length.then((value) {
+      if (value > 0) {
+        FirebaseFirestore.instance.collection('Users').doc(_auth.currentUser!.uid.toString()).update({'online': true});
+      }
+      else{
+        FirebaseFirestore.instance.collection('Users').doc(_auth.currentUser!.uid.toString()).set(
+            {'displayName':_auth.currentUser!.displayName.toString(),
+              'email': _auth.currentUser!.email,
+              'photoUrl': _auth.currentUser!.photoURL,
+              'online': true});
+      }
+    }
+    );
+  }
 }
