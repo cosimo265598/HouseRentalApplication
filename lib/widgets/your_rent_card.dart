@@ -7,6 +7,7 @@ import '../screens/detail_page.dart';
 import '../theme.dart';
 
 class RentHouse extends StatelessWidget {
+
   final String imageUrl;
   final String title;
   final String city;
@@ -162,7 +163,7 @@ class RentHouse extends StatelessWidget {
                 children: [
                   MaterialButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage()));
+                      //Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage()));
                     },
                     color: purpleColor,
                     minWidth: 100,

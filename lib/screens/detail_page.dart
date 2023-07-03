@@ -1,12 +1,139 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:rent_house/screens/appointment/appointment.dart';
 import 'package:rent_house/screens/chat/chat_room.dart';
 import 'package:rent_house/theme.dart';
 
 import '../models/houseModel.dart';
+import '../models/user.dart';
 
 class DetailPage extends StatelessWidget {
+  final House houseSelected;
 
-  const DetailPage({Key? key}) : super(key: key);
+  DetailPage({required this.houseSelected});
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  late UserRegistered _userRegistered;
+
+  Future<UserRegistered> retriveInfoOfAgent(String idUser) async {
+    DocumentSnapshot snapshot =
+        await _firestore.collection('Users').doc(idUser).get();
+    if (snapshot.exists) {
+      UserRegistered userRegistered =
+          UserRegistered.fromJson(snapshot.data()! as Map<String, dynamic>);
+      return userRegistered;
+    } else {
+      return UserRegistered(
+          displayName: "", photoUrl: "", online: true, email: "");
+    }
+  }
+
+  Widget infoOfAgent(String idUser) {
+    return FutureBuilder<UserRegistered>(
+      future: retriveInfoOfAgent(idUser),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.hasData) {
+          UserRegistered userRegistered = snapshot.data!;
+          _userRegistered = snapshot.data!;
+          return Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: NetworkImage(userRegistered.photoUrl),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                width: 50,
+                height: 50,
+              ),
+              SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    userRegistered.displayName,
+                    style: contentTitle,
+                  ),
+                  Text(
+                    "House Owner",
+                    style: infoText,
+                  ),
+                ],
+              ),
+              Spacer(),
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Icon(
+                      Icons.phone,
+                      color: purpleColor,
+                      size: 40,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      shape: CircleBorder(),
+                      backgroundColor: Colors.deepPurple.shade100,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        } else {
+          // Handle the case when the user is not found
+          return Container();
+        }
+      },
+    );
+  }
+
+  Widget checkIfHouseIsMine(
+      FirebaseAuth _auth, String agentId, BuildContext context) {
+    if (_auth.currentUser!.uid.compareTo(agentId) == 0) return Container();
+    List<String> buildChatId = [_auth.currentUser!.uid, agentId]..sort();
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => ChatRoom(
+                          idChatRoom: buildChatId.join(""),
+                          photoUrl: _userRegistered.photoUrl,
+                          displayName: _userRegistered.displayName,
+                        )));
+          },
+          backgroundColor: purpleColor,
+          extendedIconLabelSpacing: 20,
+          label: Text("Contact me"),
+          icon: Icon(Icons.messenger_outline),
+          heroTag: "btn2",
+        ),
+        FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => AppointmentScreen()));
+          },
+          backgroundColor: purpleColor,
+          extendedIconLabelSpacing: 20,
+          label: Text("Appointment"),
+          icon: Icon(Icons.calendar_month_outlined),
+          heroTag: "btn3",
+        )
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,14 +207,14 @@ class DetailPage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Modern House",
+                                      houseSelected.titolo,
                                       style: secondaryTitle,
                                     ),
                                     SizedBox(
                                       height: 4,
                                     ),
                                     Text(
-                                      "KBP Bandung, Indonesia",
+                                      houseSelected.address,
                                       style: infoSecondaryTitle,
                                     ),
                                   ],
@@ -96,12 +223,17 @@ class DetailPage extends StatelessWidget {
                                 Column(
                                   children: [
                                     Text(
-                                      "€ 350",
+                                      houseSelected.prezzo.toString(),
                                       overflow: TextOverflow.fade,
                                       style: primaryTitle,
                                     ),
                                     Text(
-                                      "30 h ago",
+                                      houseSelected.pubDate.day.toString() +
+                                          "/" +
+                                          houseSelected.pubDate.month
+                                              .toString() +
+                                          "/" +
+                                          houseSelected.pubDate.year.toString(),
                                       overflow: TextOverflow.fade,
                                       style: infoSecondaryTitle,
                                     ),
@@ -114,7 +246,7 @@ class DetailPage extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 30),
                             child: Text(
-                              "Listing Agent",
+                              "Agent",
                               style: sectionSecondaryTitle,
                             ),
                           ),
@@ -122,48 +254,8 @@ class DetailPage extends StatelessWidget {
                             height: 10,
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 30),
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  "assets/images/owner1.png",
-                                  width: 50,
-                                ),
-                                SizedBox(width: 12),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "De Kezia",
-                                      style: contentTitle,
-                                    ),
-                                    Text(
-                                      "House Owner",
-                                      style: infoText,
-                                    ),
-                                  ],
-                                ),
-                                Spacer(),
-                                Row(
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () {},
-                                      child: Icon(
-                                        Icons.phone,
-                                        color: purpleColor,
-                                        size: 40,
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        shape: CircleBorder(),
-                                        backgroundColor:
-                                            Colors.deepPurple.shade100,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
+                              padding: EdgeInsets.symmetric(horizontal: 30),
+                              child: infoOfAgent(houseSelected.agentId)),
                           SizedBox(
                             height: 24,
                           ),
@@ -201,7 +293,9 @@ class DetailPage extends StatelessWidget {
                                           Icons.bed_rounded,
                                           size: 16,
                                         ),
-                                        Text("5")
+                                        Text(houseSelected
+                                            .houseComponent['bedroom']
+                                            .toString())
                                       ],
                                     ),
                                   ),
@@ -224,7 +318,9 @@ class DetailPage extends StatelessWidget {
                                           Icons.bathtub_rounded,
                                           size: 16,
                                         ),
-                                        Text("3")
+                                        Text(houseSelected
+                                            .houseComponent['bathroom']
+                                            .toString())
                                       ],
                                     ),
                                   ),
@@ -247,7 +343,9 @@ class DetailPage extends StatelessWidget {
                                           Icons.cookie,
                                           size: 16,
                                         ),
-                                        Text("2")
+                                        Text(houseSelected
+                                            .houseComponent['kitchen']
+                                            .toString())
                                       ],
                                     ),
                                   ),
@@ -295,7 +393,12 @@ class DetailPage extends StatelessWidget {
                                         SizedBox(
                                           width: 10,
                                         ),
-                                        Text("Worker")
+                                        Text("Worker: " +
+                                            (houseSelected.rentTo['worker']
+                                                        .toString() ==
+                                                    "true"
+                                                ? "SI"
+                                                : "NO"))
                                       ],
                                     ),
                                   ),
@@ -321,7 +424,12 @@ class DetailPage extends StatelessWidget {
                                         SizedBox(
                                           width: 10,
                                         ),
-                                        Text("Students")
+                                        Text("Students: " +
+                                            (houseSelected.rentTo['student']
+                                                        .toString() ==
+                                                    "true"
+                                                ? "SI"
+                                                : "NO"))
                                       ],
                                     ),
                                   ),
@@ -347,7 +455,12 @@ class DetailPage extends StatelessWidget {
                                         SizedBox(
                                           width: 10,
                                         ),
-                                        Text("Family")
+                                        Text("Family: " +
+                                            (houseSelected.rentTo['family']
+                                                        .toString() ==
+                                                    "true"
+                                                ? "SI"
+                                                : "NO"))
                                       ],
                                     ),
                                   ),
@@ -370,7 +483,7 @@ class DetailPage extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 30),
                             child: Text(
-                              "Luxury homes at affordable prices with Bandung's hilly atmosphere. Located in a strategic location, flood free.Luxury homes at affordable prices with Bandung's hilly atmosphere. Located in a strategic location, flood free.Luxury homes at affordable prices with Bandung's hilly atmosphere. Located in a strategic location, flood free.",
+                              houseSelected.description,
                               style: descText,
                             ),
                           ),
@@ -408,7 +521,6 @@ class DetailPage extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 30),
-
                         ],
                       ),
                     ),
@@ -420,86 +532,8 @@ class DetailPage extends StatelessWidget {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          FloatingActionButton.extended(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => ChatRoom(idChatRoom: 'mb',photoUrl: "", displayName: "",)));
-            },
-            backgroundColor: purpleColor,
-            extendedIconLabelSpacing: 20,
-            label: Text("Contact me"),
-            icon: Icon(Icons.messenger_outline),
-            heroTag: "btn2",
-          ),
-        ],
-      ),
-      /*
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-        height: 90,
-        color: whiteColor,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            MaterialButton(
-              onPressed: () {},
-              color: purpleColor,
-              minWidth: 100,
-              height: 50,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(28),
-              ),
-              child: Text(
-                "Message",
-                style: TextStyle(
-                  color: whiteColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            Spacer(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Price",
-                  style: priceTitle,
-                ),
-                Text(
-                  "\$7,500",
-                  style: priceText,
-                ),
-              ],
-            ),
-            Spacer(),
-            MaterialButton(
-              onPressed: () {},
-              color: purpleColor,
-              minWidth: 100,
-              height: 50,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(28),
-              ),
-              child: Text(
-                "Call",
-                style: TextStyle(
-                  color: whiteColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),*/
+      floatingActionButton:
+          checkIfHouseIsMine(_auth, houseSelected.agentId, context),
     );
   }
 }

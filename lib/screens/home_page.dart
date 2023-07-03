@@ -27,7 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomeScreenState extends State<HomePage> {
   final currentUser = FirebaseAuth.instance.currentUser!;
-  int currentIndex = 1;
+  int currentIndex = 0;
   List<Widget> _pages = [
     HomeScreen(),
     SearchScreen(),

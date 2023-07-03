@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:rent_house/screens/create_house/add_new_house_for_rent.dart';
 import 'package:rent_house/screens/detail_page.dart';
 import 'package:rent_house/theme.dart';
 import 'package:rent_house/widgets/bottom_nav_bar.dart';
@@ -60,30 +61,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 60.0),
             child: Container(
               padding: EdgeInsets.all(4),
-              child: OutlinedButton(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    FaIcon(FontAwesomeIcons.userAltSlash, color: Colors.red),
-                    Text(
-                      'Log-out',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: purpleColor),
+              child: Column(
+                children: [
+                  OutlinedButton(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        FaIcon(FontAwesomeIcons.userAltSlash, color: Colors.red),
+                        Text(
+                          'Log-out',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: purpleColor),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                style: ButtonStyle(
-                  minimumSize: MaterialStateProperty.resolveWith((states) => const Size.fromHeight(55.0)),
-                  //maximumSize: MaterialStateProperty.resolveWith((states) => const Size(280,55.0)),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
-                ),
-                onPressed: () {
-                  //logout account
-                  final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
-                  provider.logout();
-                },
+                    style: ButtonStyle(
+                      minimumSize: MaterialStateProperty.resolveWith((states) => const Size.fromHeight(55.0)),
+                      //maximumSize: MaterialStateProperty.resolveWith((states) => const Size(280,55.0)),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
+                    ),
+                    onPressed: () {
+                      //logout account
+                      final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+                      provider.logout();
+                    },
+                  ),
+                  OutlinedButton(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        FaIcon(FontAwesomeIcons.house, color: purpleColor),
+                        Text(
+                          'Aggiungi annuncio',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: purpleColor),
+                        ),
+                      ],
+                    ),
+                    style: ButtonStyle(
+                      minimumSize: MaterialStateProperty.resolveWith((states) => const Size.fromHeight(55.0)),
+                      //maximumSize: MaterialStateProperty.resolveWith((states) => const Size(280,55.0)),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
+                    ),
+                    onPressed: () {
+                      //logout account
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => AddNewHouseForRent()));
+                    },
+                  )
+                ],
               ),
+
             ),
           ),
           SizedBox(height: 10,),
@@ -93,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               "I tuoi annunci",
               style: secondaryTitle,
             ),
-          ),
+          ),/*
           RentHouse(
             imageUrl: "assets/images/house1.png",
             title: "Wooden House",
@@ -106,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             title: "Wooden House",
             city: "Bogor",
             rating: 5,
-          ),
+          ),*/
           SizedBox(height: 10),
 
           SizedBox(

@@ -2,20 +2,14 @@
 
 import 'package:flutter/material.dart';
 
+import '../models/houseModel.dart';
 import '../screens/detail_page.dart';
 import '../theme.dart';
 
-class AroundCard extends StatelessWidget {
-  final String imageUrl;
-  final String title;
-  final String city;
-  final int rating;
-
-  AroundCard({
-    required this.imageUrl,
-    required this.title,
-    required this.city,
-    required this.rating,
+class PreviewCard extends StatelessWidget {
+  final House house;
+  PreviewCard({
+    required this.house,
   });
 
   @override
@@ -41,7 +35,7 @@ class AroundCard extends StatelessWidget {
                   Stack(
                       children: [
                         Image.asset(
-                          imageUrl,
+                          "assets/images/banner1.png",
                           width: 90,
                           height: 100,
                           fit: BoxFit.fill,
@@ -71,14 +65,14 @@ class AroundCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        title,
+                        house.titolo,
                         style: contentTitle,
                       ),
                       SizedBox(
                         height: 2,
                       ),
                       Text(
-                        city,
+                        house.city,
                         style: infoText,
                       ),
                       SizedBox(
@@ -91,7 +85,7 @@ class AroundCard extends StatelessWidget {
                       SizedBox(
                         height: 8,
                       ),
-                      Row(
+                      /*Row(
                         children: [1, 2, 3, 4, 5].map((e) {
                           return Icon(
                             Icons.star,
@@ -99,7 +93,7 @@ class AroundCard extends StatelessWidget {
                             color: (e <= rating) ? orangeColor : greyColor,
                           );
                         }).toList(),
-                      ),
+                      ),*/
                       SizedBox(
                         height: 8,
                       ),
@@ -123,7 +117,9 @@ class AroundCard extends StatelessWidget {
                                     Icons.bed_rounded,
                                     size: 16,
                                   ),
-                                  Text("5")
+                                  Text(house
+                                      .houseComponent['bedroom']
+                                      .toString())
                                 ],
                               ),
                             ),
@@ -144,7 +140,9 @@ class AroundCard extends StatelessWidget {
                                     Icons.bathtub_rounded,
                                     size: 16,
                                   ),
-                                  Text("3")
+                                  Text(house
+                                      .houseComponent['bathroom']
+                                      .toString())
                                 ],
                               ),
                             ),
@@ -165,7 +163,9 @@ class AroundCard extends StatelessWidget {
                                     Icons.room_service_outlined,
                                     size: 16,
                                   ),
-                                  Text("2")
+                                  Text(house
+                                      .houseComponent['kitchen']
+                                      .toString())
                                 ],
                               ),
                             ),
@@ -177,7 +177,7 @@ class AroundCard extends StatelessWidget {
                   Spacer(),
                   IconButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage(houseSelected: house,)));
                     },
                     icon: Icon(
                       Icons.arrow_forward_ios,

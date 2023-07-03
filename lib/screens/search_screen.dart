@@ -82,6 +82,7 @@ class _SearchScreenState extends State<SearchScreen> {
               style: secondaryTitle,
             ),
           ),
+          /*
           AroundCard(
             imageUrl: "assets/images/house1.png",
             title: "Wooden House",
@@ -115,7 +116,7 @@ class _SearchScreenState extends State<SearchScreen> {
             title: "Hill House",
             city: "Makasar",
             rating: 3,
-          ),
+          ),*/
           SizedBox(
             height: 60,
           ),

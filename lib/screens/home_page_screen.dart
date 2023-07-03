@@ -22,12 +22,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
         children: [
           // NOTE: header
           Padding(
@@ -65,28 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
               },
             )
-            /*ListView(
-              padding: EdgeInsets.only(bottom: 10),
-              scrollDirection: Axis.horizontal,
-              children: [
-                SizedBox(width: 30),
-                SliderCard(
-                  imageUrl: "assets/images/banner1.png",
-                  title: "Modern House",
-                  city: "Bandung",
-                  rating: 5,
-                ),
-                SizedBox(width: 30),
-                SliderCard(
-                  imageUrl: "assets/images/banner2.png",
-                  title: "White House",
-                  city: "Jakarta",
-                  rating: 4,
-                ),
-              ],
-            ),*/
           ),
-          // NOTE: recommeded
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(
@@ -95,41 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Categories(),
-          // puoi sostituirlo conun for
-          AroundCard(
-            imageUrl: "assets/images/house1.png",
-            title: "Wooden House",
-            city: "Bandung",
-            rating: 4,
-          ),
-          SizedBox(height: 10),
-          AroundCard(
-            imageUrl: "assets/images/house2.png",
-            title: "Wooden House",
-            city: "Bogor",
-            rating: 5,
-          ),
-          SizedBox(height: 10),
-          AroundCard(
-            imageUrl: "assets/images/house3.png",
-            title: "Hill House",
-            city: "Makasar",
-            rating: 3,
-          ),
-          SizedBox(height: 10),
-          AroundCard(
-            imageUrl: "assets/images/house2.png",
-            title: "Wooden House",
-            city: "Bogor",
-            rating: 5,
-          ),
-          SizedBox(height: 10),
-          AroundCard(
-            imageUrl: "assets/images/house3.png",
-            title: "Hill House",
-            city: "Makasar",
-            rating: 3,
-          ),
+          loadHouseRent(),
           SizedBox(
             height: 60,
           ),
@@ -155,6 +104,35 @@ class _HomeScreenState extends State<HomeScreen> {
       house: h,
     )]
   );
+
+  Widget houses(House h) =>
+        PreviewCard(
+          house: h,
+        );
+
+  Stream<List<House>> readHouseWithFilter() =>
+      FirebaseFirestore.instance.collection('Houses').snapshots().map((snap) =>
+          snap.docs.map((doc)=> House.fromJson(doc.data()) ).toList());
+
+
+  Widget loadHouseRent() {
+    return StreamBuilder<List<House>>(
+        stream: readHouseWithFilter(),
+        builder: (BuildContext context, snapshot) {
+          if (snapshot.hasError)
+            return Text("Error conncetion to DB");
+          else if (snapshot.hasData) {
+            final house = snapshot.data;
+            return Column(
+              children: house!.map(houses).toList(),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+    );
+
+  }
 
 
 }

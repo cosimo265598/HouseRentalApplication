@@ -23,7 +23,7 @@ class SliderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage()));
+        //Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage()));
       },
       child: Material(
         shadowColor: shadowColor,

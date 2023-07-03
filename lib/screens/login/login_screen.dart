@@ -9,6 +9,8 @@ import 'package:rent_house/screens/login/google_sign_in.dart';
 import 'package:rent_house/screens/login/sign_up_widget.dart';
 import 'package:rent_house/theme.dart';
 
+import '../create_house/add_new_house_for_rent.dart';
+
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -22,7 +24,7 @@ class LoginPage extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasData) {
               checkUser();
-              return HomePage(); //AppointmentScreen();
+              return  HomePage();
             } else if (snapshot.hasError) {
               return Center(child: Text("Error connection!",style: primaryTitle,));
             } else {

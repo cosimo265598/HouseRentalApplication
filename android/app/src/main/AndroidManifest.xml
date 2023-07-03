@@ -2,6 +2,7 @@
     package="com.example.house_rent_application">
    <application
         android:label="house_rent_application"
+        android:requestLegacyExternalStorage="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

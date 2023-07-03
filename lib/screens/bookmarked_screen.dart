@@ -30,12 +30,12 @@ class _BookmarkedScreenState extends State<BookmarkedScreen> {
               style: secondaryTitle,
             ),
           ),
-          AroundCard(
+          /*PreviewCard(
             imageUrl: "assets/images/house1.png",
             title: "Wooden House",
             city: "Bandung",
             rating: 4,
-          ),
+          ),*/
           SizedBox(
             height: 60,
           ),
