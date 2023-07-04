@@ -20,18 +20,18 @@ class House {
 
   Map<String, dynamic> toJson() {
     return {
-      'idDocument': idDocument,
-      'titolo': titolo,
-      'component': houseComponent,
-      'renTo': rentTo,
-      'pubDate': pubDate,
-      'prezzo': prezzo,
-      'posizione': posizione,
-      'address': address,
-      'photos': photos,
-      'description': description,
-      'agendId': agentId,
-      'city' : city,
+      'idDocument': this.idDocument,
+      'titolo': this.titolo,
+      'component': this.houseComponent,
+      'rentTo': this.rentTo,
+      'pubDate': this.pubDate,
+      'prezzo': this.prezzo,
+      'posizione': this.posizione,
+      'address': this.address,
+      'photos': this.photos,
+      'description': this.description,
+      'agendId': this.agentId,
+      'city' : this.city,
     };
   }
 
