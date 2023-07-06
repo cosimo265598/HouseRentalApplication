@@ -1,23 +1,17 @@
-
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../models/houseModel.dart';
 import '../screens/detail_page.dart';
 import '../theme.dart';
 
 class RentHouse extends StatelessWidget {
-
-  final String imageUrl;
-  final String title;
-  final String city;
-  final int rating;
+  final House house;
 
   RentHouse({
-    required this.imageUrl,
-    required this.title,
-    required this.city,
-    required this.rating,
+    required this.house,
   });
 
   @override
@@ -31,163 +25,91 @@ class RentHouse extends StatelessWidget {
         child: Container(
           width: MediaQuery.of(context).size.width,
           //height: 170,
-          padding: EdgeInsets.all(20),
+          //padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             color: whiteColor,
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Image.asset(
-                    imageUrl,
-                    width: 90,
-                    height: 100,
-                    fit: BoxFit.fill,
+                  Expanded(
+                    child: Container(
+                      width: 90,
+                      height: 90,
+                      child: Image.memory(
+                        base64Decode(house.photos[0]),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                  SizedBox(width: 8),
+                  SizedBox(width: 20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        title,
+                        house.titolo,
                         style: contentTitle,
                       ),
                       SizedBox(
                         height: 2,
                       ),
                       Text(
-                        city,
-                        style: infoText,
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Text(
-                        "Quartiere: San Paolo",
+                        house.city,
                         style: infoText,
                       ),
                       SizedBox(
                         height: 8,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: Container(
-                              height: 20,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(
-                                    Icons.bed_rounded,
-                                    size: 16,
-                                  ),
-                                  Text("5")
-                                ],
-                              ),
+                          OutlinedButton(
+                            child: FaIcon(Icons.edit_outlined,
+                                color: Colors.green),
+                            style: OutlinedButton.styleFrom(
+                              fixedSize: Size(40, 40),
+                              side: BorderSide(width: 2, color: purpleColor),
+                              shape: CircleBorder(),
                             ),
+                            onPressed: () {
+                              //Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage()));
+                            },
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Container(
-                              height: 20,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(
-                                    Icons.bathtub_rounded,
-                                    size: 16,
-                                  ),
-                                  Text("3")
-                                ],
-                              ),
+                          OutlinedButton(
+                            child: FaIcon(Icons.remove_red_eye_outlined,
+                                color: Colors.blue),
+                            style: OutlinedButton.styleFrom(
+                              fixedSize: Size(40, 40),
+                              side: BorderSide(width: 2, color: purpleColor),
+                              shape: CircleBorder(),
                             ),
+                            onPressed: () {
+                              //Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage()));
+                            },
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Container(
-                              height: 20,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(
-                                    Icons.room_service_outlined,
-                                    size: 16,
-                                  ),
-                                  Text("2")
-                                ],
-                              ),
+                          OutlinedButton(
+                            child: FaIcon(Icons.delete_outline_outlined,
+                                color: Colors.red),
+                            style: OutlinedButton.styleFrom(
+                              fixedSize: Size(40, 40),
+                              side: BorderSide(width: 2, color: purpleColor),
+                              shape: CircleBorder(),
                             ),
+                            onPressed: () {},
                           ),
                         ],
-                      ),
+                      )
                     ],
                   ),
                   Spacer(),
-
                 ],
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "Updated: 31/12/2023",
-                    style: infoText,
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MaterialButton(
-                    onPressed: () {
-                      //Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage()));
-                    },
-                    color: purpleColor,
-                    minWidth: 100,
-                    height: 39,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: FaIcon(FontAwesomeIcons.solidEye,color: whiteColor,),
-                  ),
-                  MaterialButton(
-                    onPressed: () {
-                    },
-                    color: redColor,
-                    //minWidth: 100,
-                    height: 39,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: FaIcon(FontAwesomeIcons.remove,color: whiteColor,),
-                  ),
-
-                ],
-              ),
-
             ],
           ),
         ),

@@ -36,6 +36,8 @@ dependencies:
   table_calendar: ^3.0.3
   flutter_datetime_picker: ^1.5.1
   image_picker: ^0.7.5+4
+  permission_handler: ^9.2.0
+  location: ^4.4.0
 
 dev_dependencies:
   flutter_test:
