@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 import '../models/houseModel.dart';
 import '../screens/detail_page.dart';
@@ -6,24 +7,31 @@ import '../theme.dart';
 
 class SliderCard extends StatelessWidget {
   final House house;
-  final String imageUrl;
-  final String title;
-  final String city;
-  final int rating;
-
   SliderCard({
-    required this.imageUrl,
-    required this.title,
-    required this.city,
-    required this.rating,
     required this.house,
   });
 
+  Widget checkPhoto(House h ){
+      if(house.photos.isNotEmpty)
+        return Image.memory(
+          base64Decode(house.photos[0]),
+          width: 231,
+          height: 150,
+          fit: BoxFit.fill,
+        );
+
+      return Image.asset(
+          "assets/images/noimage.png",
+          width: 231,
+          height: 150,
+          fit: BoxFit.fill,
+        );
+  }
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        //Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage(houseSelected: house,)));
       },
       child: Material(
         shadowColor: shadowColor,
@@ -38,11 +46,7 @@ class SliderCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
-                  imageUrl,
-                  width: 231,
-                  height: 150,
-                ),
+                checkPhoto(house),
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 12,
@@ -54,17 +58,17 @@ class SliderCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            title,
+                            house.titolo,
                             style: contentTitle,
                           ),
                           Text(
-                            city,
+                            house.city,
                             style: infoText,
                           )
                         ],
                       ),
                       Spacer(),
-                      Row(
+                      /*Row(
                         children: [1, 2, 3, 4, 5].map((e) {
                           return Icon(
                             Icons.star,
@@ -72,7 +76,7 @@ class SliderCard extends StatelessWidget {
                             size: 12,
                           );
                         }).toList(),
-                      ),
+                      ),*/
                     ],
                   ),
                 ),

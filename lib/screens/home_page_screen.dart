@@ -97,10 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
     children: [
     SizedBox(width: 30),
     SliderCard(
-      imageUrl: "assets/images/banner1.png",
-      title: h.titolo,
-      city: h.city,
-      rating: 4,
       house: h,
     )]
   );
@@ -120,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
         stream: readHouseWithFilter(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasError)
-            return Text("Error conncetion to DB");
+            return Container();
           else if (snapshot.hasData) {
             final house = snapshot.data;
             return Column(

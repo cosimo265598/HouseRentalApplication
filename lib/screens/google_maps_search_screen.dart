@@ -29,6 +29,7 @@ class GoogleMapsScreenState extends State<GoogleMapsScreen> {
   @override
   void dispose() {
     super.dispose();
+    _documents.clear();
   }
   @override
   void initState() {
@@ -71,10 +72,7 @@ class GoogleMapsScreenState extends State<GoogleMapsScreen> {
         currentLocation = locationData;
       });
     });
-    //LocationData locationData = await location.getLocation();
-    //setState(() {
-    //  currentLocation = locationData;
-    //});
+
   }
 
   double zoomVal = 5.0;
@@ -88,39 +86,14 @@ class GoogleMapsScreenState extends State<GoogleMapsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            //_arrowBack(context),
             _buildGoogleMap(context),
-            //_zoomminusfunction(),
-            //_zoomplusfunction(),
-            //_buildContainer(),
+
           ],
         ),
       ),
     );
   }
 
-  Widget _arrowBack(context) {
-    return Positioned(
-      top: 20,
-      left: 20,
-      child: MaterialButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        minWidth: 30,
-        height: 30,
-        padding: EdgeInsets.all(5),
-        color: whiteColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100),
-        ),
-        child: Icon(
-          Icons.arrow_back_ios_outlined,
-          size: 14,
-        ),
-      ),
-    );
-  }
 
   Widget _buildContainer() {
     return Align(

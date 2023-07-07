@@ -1,34 +1,77 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rent_house/models/appointmentModel.dart';
 import 'package:rent_house/theme.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter/material.dart';
 
 class AppointmentScreen extends StatefulWidget {
+  String toUser;
+  String titolo;
+
+  AppointmentScreen({required this.toUser, required this.titolo});
+
   @override
   _AppointmentScreenState createState() => _AppointmentScreenState();
 }
 
 class _AppointmentScreenState extends State<AppointmentScreen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String myId = FirebaseAuth.instance.currentUser!.uid;
   DateTime _selectedDate = DateTime.now();
-  TimeOfDay _selectedTime = TimeOfDay.now();
+
+  //TimeOfDay _selectedTime = TimeOfDay.now();
   int _selectedAvailableTime = 0;
   List<String> availableTimes = [
-    '9:00 AM',
-    '10:00 AM',
-    '11:00 AM',
-    '2:00 PM',
-    '3:00 PM',
-    '4:00 PM',
-    '5:00 PM',
+    '9:00',
+    '10:00',
+    '11:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
     // Aggiungi altri orari disponibili
   ];
+
+  Future<void> addAppointmentToCollection() async {
+    int h = int.parse(availableTimes[_selectedAvailableTime].split(":")[0]);
+    int m = int.parse(availableTimes[_selectedAvailableTime].split(":")[1]);
+
+    Map<String, dynamic> data = UserAppointment(
+            id: "",
+            idUser: this.widget.toUser,
+            confirmed: false,
+            date: DateTime(_selectedDate.year, _selectedDate.month,
+                _selectedDate.day, h, m),
+            titolo: this.widget.titolo,
+            createdBy: myId)
+        .toJson();
+    _firestore
+        .collection('Appointments')
+        .add(data)
+        .then((DocumentReference documentRef) {
+      // Get the generated document ID
+      String documentId = documentRef.id;
+      // Update the document with the ID
+      documentRef.update({'id': documentId}).then((_) {
+        print('Document added with ID: $documentId');
+      }).catchError((error) {
+        print('Failed to update document with ID: $documentId');
+      });
+    }).catchError((error) {
+      print('Failed to add document: $error');
+    });
+    ;
+  }
+
   void _onSelectDate(DateTime day, DateTime focusDay) {
     setState(() {
       _selectedDate = day;
     });
   }
 
-  void _selectTime() {
+  /*void _selectTime() {
     DatePicker.showTimePicker(
       context,
       showSecondsColumn: false,
@@ -38,7 +81,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         });
       },
     );
-  }
+  }*/
 
   void _showBottomPop() {
     showModalBottomSheet(
@@ -53,16 +96,16 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
             curve: Curves.easeOut,
           )),
           child: Container(
-            height: 100, // Altezza del pop dal basso
+            height: 200, // Altezza del pop dal basso
             child: Align(
               alignment: Alignment.bottomCenter,
               child: // Contenuto del pop dal basso
                   Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Container(
-                child: Column(
+                padding: const EdgeInsets.all(40.0),
+                child: Container(
+                  child: Column(
                     children: [
-                      Text('Prenotazione inviata per il giorno\n ' +
+                      Text('Vuoi fissare un appuntamento per il giorno\n ' +
                           _selectedDate.day.toString() +
                           "/" +
                           _selectedDate.month.toString() +
@@ -70,11 +113,82 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                           _selectedDate.year.toString() +
                           " alle ore: " +
                           availableTimes[_selectedAvailableTime]),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          TextButton(
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              // Text color
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(purpleColor),
+                              // Button background color
+                              textStyle: MaterialStateProperty.all<TextStyle>(
+                                TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold), // Text style
+                              ),
+                              padding:
+                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                EdgeInsets.symmetric(
+                                    vertical: 12.0,
+                                    horizontal: 24.0), // Padding
+                              ),
+                              shape: MaterialStateProperty.all<OutlinedBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        8.0)), // Button shape
+                              ),
+                            ),
+                            onPressed: () {
+                              addAppointmentToCollection();
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Yes'),
+                          ),
+                          TextButton(
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              // Text color
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(purpleColor),
+                              // Button background color
+                              textStyle: MaterialStateProperty.all<TextStyle>(
+                                TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold), // Text style
+                              ),
+                              padding:
+                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                EdgeInsets.symmetric(
+                                    vertical: 12.0,
+                                    horizontal: 24.0), // Padding
+                              ),
+                              shape: MaterialStateProperty.all<OutlinedBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        8.0)), // Button shape
+                              ),
+                            ),
+                            onPressed: () {
+                              // Cancel or dismiss the confirmation dialog
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('No'),
+                          ),
+                        ],
+                      )
                       // Altri widget desiderati
                     ],
+                  ),
                 ),
               ),
-                  ),
             ),
           ),
         );
@@ -143,7 +257,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
               height: 50,
               width: 250,
               child: ElevatedButton(
-
                 child: Text("Conferma prenotazione"),
                 onPressed: () {
                   _showBottomPop();

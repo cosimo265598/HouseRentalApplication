@@ -1,5 +1,7 @@
 
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import '../models/houseModel.dart';
@@ -34,12 +36,20 @@ class PreviewCard extends StatelessWidget {
                 children: [
                   Stack(
                       children: [
-                        Image.asset(
-                          "assets/images/banner1.png",
+                        if(house.photos.isNotEmpty)
+                          Image.memory(
+                            base64Decode(house.photos[0]),
+                            width: 90,
+                            height: 100,
+                            fit: BoxFit.fill,
+                          )
+                        else
+                          Image.asset(
+                          "assets/images/noimage.png",
                           width: 90,
                           height: 100,
                           fit: BoxFit.fill,
-                        ),
+                          ),
                         Positioned(
                           top: -8,
                           left: -8,
@@ -78,10 +88,7 @@ class PreviewCard extends StatelessWidget {
                       SizedBox(
                         height: 8,
                       ),
-                      Text(
-                        "Quartiere: San Paolo",
-                        style: infoText,
-                      ),
+
                       SizedBox(
                         height: 8,
                       ),

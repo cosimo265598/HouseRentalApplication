@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +44,8 @@ class DetailPage extends StatelessWidget {
           UserRegistered userRegistered = snapshot.data!;
           _userRegistered = snapshot.data!;
           return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
                 decoration: BoxDecoration(
@@ -123,7 +127,7 @@ class DetailPage extends StatelessWidget {
         FloatingActionButton.extended(
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (_) => AppointmentScreen()));
+                MaterialPageRoute(builder: (_) => AppointmentScreen(toUser: _userRegistered.email, titolo: houseSelected.titolo)));
           },
           backgroundColor: purpleColor,
           extendedIconLabelSpacing: 20,
@@ -133,6 +137,37 @@ class DetailPage extends StatelessWidget {
         )
       ],
     );
+  }
+
+  Widget checkPhoto(House h,BuildContext context ){
+    if(h.photos.isNotEmpty)
+      return Image.memory(
+        base64Decode(h.photos[0]),
+        width: MediaQuery.of(context).size.width,
+        fit: BoxFit.fill,
+      );
+
+      return Image.asset(
+        "assets/images/noimage.png",
+        width: MediaQuery.of(context).size.width,
+        fit: BoxFit.fill,
+      );
+  }
+  List<Widget> returnPhotos(House h){
+    List<Widget> photosOfAppartment =[];
+
+    for (String p in h.photos){
+      photosOfAppartment.add(Row(
+        children: [
+          SizedBox(width: 30),
+          FacilityCard(
+            imageUrl: p,
+            title: "Foto",
+          ),
+        ],
+      ),);
+    }
+    return photosOfAppartment;
   }
 
   @override
@@ -150,12 +185,7 @@ class DetailPage extends StatelessWidget {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(
-                          "assets/images/banner1.png",
-                          //height: 300,
-                          width: MediaQuery.of(context).size.width,
-                          fit: BoxFit.fill,
-                        ),
+                        child: checkPhoto(houseSelected, context)
                       ),
                       Positioned(
                         top: 20,
@@ -497,30 +527,15 @@ class DetailPage extends StatelessWidget {
                           ),
                           SizedBox(height: 10),
                           Container(
-                            height: 330,
+                            height: 250,
                             padding: EdgeInsets.only(bottom: 5),
                             child: ListView(
                               scrollDirection: Axis.horizontal,
-                              children: [
-                                SizedBox(width: 30),
-                                FacilityCard(
-                                  imageUrl: "assets/images/facilities1.png",
-                                  title: "Swimming Pool",
-                                ),
-                                SizedBox(width: 20),
-                                FacilityCard(
-                                  imageUrl: "assets/images/facilities2.png",
-                                  title: "4 Bedroom",
-                                ),
-                                SizedBox(width: 20),
-                                FacilityCard(
-                                  imageUrl: "assets/images/facilities3.png",
-                                  title: "Garage",
-                                ),
-                              ],
+                              children:
+                                returnPhotos(houseSelected),
                             ),
                           ),
-                          SizedBox(height: 30),
+                          SizedBox(height: 80),
                         ],
                       ),
                     ),
@@ -575,8 +590,9 @@ class _FacilityCardState extends State<FacilityCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(
-                widget.imageUrl,
+                Image.memory(
+                base64Decode(widget.imageUrl),
+                  //height: 100,
               ),
               SizedBox(height: 9),
               Center(

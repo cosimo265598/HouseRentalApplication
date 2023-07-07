@@ -1,20 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rent_house/screens/detail_page.dart';
 import 'package:rent_house/theme.dart';
 import 'package:rent_house/widgets/bottom_nav_bar.dart';
 import 'package:rent_house/widgets/top_bar.dart';
 
+import '../models/houseModel.dart';
 import '../widgets/around_card.dart';
 import '../widgets/filter_categories.dart';
 import '../widgets/slide_card.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
+
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String searchQuery = "";
+
+  Stream<List<House>> readHouse() => _firestore
+      .collection('Houses')
+      .where('titolo', isGreaterThanOrEqualTo: searchQuery)
+      .where('titolo', isLessThan: searchQuery + 'z')
+      .snapshots()
+      .map((snap) =>
+          snap.docs.map((doc) => House.fromJson(doc.data())).toList());
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -29,6 +43,11 @@ class _SearchScreenState extends State<SearchScreen> {
               shadowColor: shadowColor,
               borderRadius: BorderRadius.circular(28),
               child: TextField(
+                onChanged: (value) {
+                  setState(() {
+                    searchQuery = value;
+                  });
+                },
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: greyColor.withOpacity(0.2),
@@ -41,27 +60,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     horizontal: 20,
                     vertical: 19,
                   ),
-                  suffixIcon: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: MaterialButton(
-                      onPressed: () => showModalBottomSheet(
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          context: context,
-                          builder: (context) => _buildModalSheet()),
-                      color: purpleColor,
-                      minWidth: 39,
-                      height: 39,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Icon(
-                        Icons.display_settings_rounded,
-                        color: whiteColor,
-                        size: 16,
-                      ),
-                    ),
-                  ),
+
                   prefixIcon: Padding(
                     padding: EdgeInsets.all(8),
                     child: Icon(
@@ -78,54 +77,55 @@ class _SearchScreenState extends State<SearchScreen> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: Text(
-              "What we found:",
+              "Risultati:",
               style: secondaryTitle,
             ),
           ),
-          /*
-          AroundCard(
-            imageUrl: "assets/images/house1.png",
-            title: "Wooden House",
-            city: "Bandung",
-            rating: 4,
-          ),
-          SizedBox(height: 10),
-          AroundCard(
-            imageUrl: "assets/images/house2.png",
-            title: "Wooden House",
-            city: "Bogor",
-            rating: 5,
-          ),
-          SizedBox(height: 10),
-          AroundCard(
-            imageUrl: "assets/images/house3.png",
-            title: "Hill House",
-            city: "Makasar",
-            rating: 3,
-          ),
-          SizedBox(height: 10),
-          AroundCard(
-            imageUrl: "assets/images/house2.png",
-            title: "Wooden House",
-            city: "Bogor",
-            rating: 5,
-          ),
-          SizedBox(height: 10),
-          AroundCard(
-            imageUrl: "assets/images/house3.png",
-            title: "Hill House",
-            city: "Makasar",
-            rating: 3,
-          ),*/
-          SizedBox(
-            height: 60,
+          Container(
+            height: 600,
+            child: Center(
+              child: StreamBuilder<List<House>>(
+                stream: readHouse(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final searchResults = snapshot.data!;
+                    // Build the UI using the searchResults
+                    return ListView.builder(
+                      itemCount: searchResults.length,
+                      itemBuilder: (context, index) {
+                        final house = searchResults[index];
+                        // Build the widget for each search result
+                        return ListTile(
+                          trailing: Icon(Icons.maps_home_work_sharp),
+                          title: Text(house.titolo)
+                          ,
+                          // Customize the display of each search result as needed
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailPage(houseSelected: house,),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildModalSheet() => DraggableScrollableSheet(
+Widget _buildModalSheet() => DraggableScrollableSheet(
         initialChildSize: 0.4,
         minChildSize: 0.3,
         maxChildSize: 0.9,
@@ -141,10 +141,8 @@ class _SearchScreenState extends State<SearchScreen> {
               child: ListView(
                 controller: scrollController,
                 children: [
-                  _buildFilterSearch(Icons.add, "Search on"),
-                  _buildFilterSearch(Icons.price_check, "Price"),
-                  _buildFilterSearch(Icons.work_outlined, "Worker"),
-                  _buildFilterSearch(Icons.map, "Hello man"),
+                  _buildFilterSearch(Icons.location_city_outlined, "Search on"),
+                  _buildFilterSearch(Icons.price_check_rounded, "Price"),
                   MaterialButton(
 
                     color: purpleColor,
