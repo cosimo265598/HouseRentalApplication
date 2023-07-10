@@ -14,42 +14,50 @@ class PreviewCard extends StatelessWidget {
     required this.house,
   });
 
+  Widget checkImage(){
+    if(house.photos.isNotEmpty)
+      return Image.memory(
+        base64Decode(house.photos[0]),
+        width: 90,
+        height: 100,
+        fit: BoxFit.fill,
+      );
+
+    return  Image.asset(
+        "assets/images/noimage.png",
+        width: 90,
+        height: 100,
+        fit: BoxFit.fill,
+      );
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Material(
-        elevation: 10,
+        elevation: 15,
         shadowColor: shadowColor,
         borderRadius: BorderRadius.circular(14),
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: 170,
-          padding: EdgeInsets.all(20),
+          //height: 170,
+          padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            color: whiteColor,
+            color: Colors.white38,
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Stack(
                       children: [
-                        if(house.photos.isNotEmpty)
-                          Image.memory(
-                            base64Decode(house.photos[0]),
-                            width: 90,
-                            height: 100,
-                            fit: BoxFit.fill,
-                          )
-                        else
-                          Image.asset(
-                          "assets/images/noimage.png",
-                          width: 90,
-                          height: 100,
-                          fit: BoxFit.fill,
-                          ),
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(6),
+                            child: checkImage()
+                        ),
                         Positioned(
                           top: -8,
                           left: -8,
@@ -71,125 +79,124 @@ class PreviewCard extends StatelessWidget {
                       ]
                   ),
                   SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        house.titolo,
-                        style: contentTitle,
-                      ),
-                      SizedBox(
-                        height: 2,
-                      ),
-                      Text(
-                        house.city,
-                        style: infoText,
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-
-                      SizedBox(
-                        height: 8,
-                      ),
-                      /*Row(
-                        children: [1, 2, 3, 4, 5].map((e) {
-                          return Icon(
-                            Icons.star,
-                            size: 12,
-                            color: (e <= rating) ? orangeColor : greyColor,
-                          );
-                        }).toList(),
-                      ),*/
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        mainAxisSize: MainAxisSize.min,
+                  Expanded(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: Container(
-                              height: 20,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(
-                                    Icons.bed_rounded,
-                                    size: 16,
-                                  ),
-                                  Text(house
-                                      .houseComponent['bedroom']
-                                      .toString())
-                                ],
-                              ),
-                            ),
+                          Text(
+                            house.titolo,
+                            style: contentTitle,
+
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Container(
-                              height: 20,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(
-                                    Icons.bathtub_rounded,
-                                    size: 16,
-                                  ),
-                                  Text(house
-                                      .houseComponent['bathroom']
-                                      .toString())
-                                ],
-                              ),
-                            ),
+                          SizedBox(
+                            height: 2,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Container(
-                              height: 20,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(
-                                    Icons.room_service_outlined,
-                                    size: 16,
-                                  ),
-                                  Text(house
-                                      .houseComponent['kitchen']
-                                      .toString())
-                                ],
-                              ),
+                          Text(
+                              house.address,
+                              style: infoText,
                             ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          /*Row(
+                            children: [1, 2, 3, 4, 5].map((e) {
+                              return Icon(
+                                Icons.star,
+                                size: 12,
+                                color: (e <= rating) ? orangeColor : greyColor,
+                              );
+                            }).toList(),
+                          ),*/
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: Container(
+                                  height: 20,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Icon(
+                                        Icons.bed_rounded,
+                                        size: 16,
+                                      ),
+                                      Text(house
+                                          .houseComponent['bedroom']
+                                          .toString())
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: Container(
+                                  height: 20,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Icon(
+                                        Icons.bathtub_rounded,
+                                        size: 16,
+                                      ),
+                                      Text(house
+                                          .houseComponent['bathroom']
+                                          .toString())
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: Container(
+                                  height: 20,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Icon(
+                                        Icons.room_service_outlined,
+                                        size: 16,
+                                      ),
+                                      Text(house
+                                          .houseComponent['kitchen']
+                                          .toString())
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
                   ),
-                  Spacer(),
+                  SizedBox(width: 20,),
                   IconButton(
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage(houseSelected: house,)));
                     },
                     icon: Icon(
-                      Icons.arrow_forward_ios,
+                      Icons.arrow_forward_ios_sharp,
                       color: blackColor,
-                      size: 20,
+                      size: 30,
                     ),
                   ),
                 ],
@@ -203,7 +210,7 @@ class PreviewCard extends StatelessWidget {
                     style: infoText,
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

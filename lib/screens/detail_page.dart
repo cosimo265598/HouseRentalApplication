@@ -233,41 +233,45 @@ class DetailPage extends StatelessWidget {
                             ),
                             child: Row(
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      houseSelected.titolo,
-                                      style: secondaryTitle,
+                                 Expanded(
+                                   child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          houseSelected.titolo,
+                                          style: secondaryTitle,
+                                        ),
+                                        SizedBox(
+                                          height: 4,
+                                        ),
+                                        Text(
+                                          houseSelected.address,
+                                          style: infoSecondaryTitle,
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Text(
-                                      houseSelected.address,
-                                      style: infoSecondaryTitle,
-                                    ),
-                                  ],
-                                ),
-                                Spacer(),
-                                Column(
-                                  children: [
-                                    Text(
-                                      houseSelected.prezzo.toString(),
-                                      overflow: TextOverflow.fade,
-                                      style: primaryTitle,
-                                    ),
-                                    Text(
-                                      houseSelected.pubDate.day.toString() +
-                                          "/" +
-                                          houseSelected.pubDate.month
-                                              .toString() +
-                                          "/" +
-                                          houseSelected.pubDate.year.toString(),
-                                      overflow: TextOverflow.fade,
-                                      style: infoSecondaryTitle,
-                                    ),
-                                  ],
+                                 ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        houseSelected.prezzo.toString(),
+                                        overflow: TextOverflow.fade,
+                                        style: primaryTitle,
+                                      ),
+                                      Text(
+                                        houseSelected.pubDate.day.toString() +
+                                            "/" +
+                                            houseSelected.pubDate.month
+                                                .toString() +
+                                            "/" +
+                                            houseSelected.pubDate.year.toString(),
+                                        overflow: TextOverflow.fade,
+                                        style: infoSecondaryTitle,
+                                      ),
+                                    ],
+                                  ),
                                 )
                               ],
                             ),

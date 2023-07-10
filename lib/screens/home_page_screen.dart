@@ -12,10 +12,10 @@ import '../widgets/around_card.dart';
 import '../widgets/filter_categories.dart';
 import '../widgets/slide_card.dart';
 
+const int RECENT = 7;
 
-const int RECENT = 390;
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key }) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -24,7 +24,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
 
   @override
   Widget build(BuildContext context) {
@@ -50,26 +49,25 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Container(
-            height: 216,
-            child: StreamBuilder<List<House>>(
-              stream: readHouse(),
-              builder: (BuildContext context, snapshot) {
-                if (snapshot.hasError)
-                  return Text("Error conncetion to DB");
-                else if (snapshot.hasData) {
-                  final house = snapshot.data;
-                  //replicateData();
-                  return ListView(
-                    padding: EdgeInsets.only(bottom: 10),
-                    scrollDirection: Axis.horizontal,
-                    children: house!.map(buildExample).toList(),
-                  );
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              },
-            )
-          ),
+              height: 216,
+              child: StreamBuilder<List<House>>(
+                stream: readHouse(),
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.hasError)
+                    return Text("Error conncetion to DB");
+                  else if (snapshot.hasData) {
+                    final house = snapshot.data;
+                    //replicateData();
+                    return ListView(
+                      padding: EdgeInsets.only(bottom: 10),
+                      scrollDirection: Axis.horizontal,
+                      children: house!.map(buildExample).toList(),
+                    );
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
+              )),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(
@@ -87,48 +85,53 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Stream<List<House>> readHouse() =>
-      FirebaseFirestore.instance.collection('Houses').snapshots().map((snap) =>
-          snap.docs.map((doc)=> House.fromJson(doc.data()) ).where((element) =>
-              DateTime.now().subtract(const Duration(days: RECENT)).isBefore(element.pubDate))
-              .toList());
+  Stream<List<House>> readHouse() => FirebaseFirestore.instance
+      .collection('Houses')
+      .where('pubDate', isGreaterThan: DateTime.now().subtract(const Duration(days: RECENT)))
+      .orderBy('pubDate', descending: true)
+      .limit(10)
+      .snapshots()
+      .map((snap) => snap.docs
+          .map((doc) => House.fromJson(doc.data()))
+          .toList());
 
-  Widget buildExample(House h) => Row(
-    children: [
-    SizedBox(width: 30),
-    SliderCard(
-      house: h,
-    )]
-  );
-
-  Widget houses(House h) =>
-        PreviewCard(
+  Widget buildExample(House h) => Row(children: [
+        SizedBox(width: 30),
+        SliderCard(
           house: h,
-        );
+        )
+      ]);
+
+  Widget houses(House h) => Column(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          PreviewCard(
+            house: h,
+          ),
+        ],
+      );
 
   Stream<List<House>> readHouseWithFilter() =>
       FirebaseFirestore.instance.collection('Houses').snapshots().map((snap) =>
-          snap.docs.map((doc)=> House.fromJson(doc.data()) ).toList());
-
+          snap.docs.map((doc) => House.fromJson(doc.data())).toList());
 
   Widget loadHouseRent() {
     return StreamBuilder<List<House>>(
-        stream: readHouseWithFilter(),
-        builder: (BuildContext context, snapshot) {
-          if (snapshot.hasError)
-            return Container();
-          else if (snapshot.hasData) {
-            final house = snapshot.data;
-            return Column(
-              children: house!.map(houses).toList(),
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+      stream: readHouseWithFilter(),
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.hasError)
+          return Container();
+        else if (snapshot.hasData) {
+          final house = snapshot.data;
+          return Column(
+            children: house!.map(houses).toList(),
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
     );
-
   }
-
-
 }

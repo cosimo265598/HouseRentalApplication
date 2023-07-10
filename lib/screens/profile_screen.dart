@@ -44,10 +44,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // Handle the case when there are no documents found
     }
   }
+  _deleteDocument(House house) => FirebaseFirestore.instance
+      .collection('Houses')
+  .doc(house.idDocument).delete();
 
-  Widget createWidgetRentHouse(House h) => PreviewCard(
+  void _showDeleteConfirmationDialog(BuildContext context, House house) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Eliminazione'),
+          content: Text('Sei sicuro di voler eliminare ?'),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                _deleteDocument(house);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  Widget createWidgetRentHouse(House h) =>  Column(
+    children: [
+      SizedBox(height: 20,),
+      PreviewCard(
         house: h,
-      );
+      ),
+      TextButton(
+          onPressed: () {
+            _showDeleteConfirmationDialog(context,h);
+          },
+          child: Text('Delete'),
+        ),
+    ],
+  );
 
   Widget createWidgetAppointmentHouse(UserAppointment h) => AppointmentCard(
         appointment: h,
