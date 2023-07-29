@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rent_house/models/appointmentModel.dart';
 
+import '../../models/notificationAlert.dart';
 import '../../theme.dart';
 
 class AppointmentCard extends StatelessWidget {
@@ -60,18 +61,65 @@ class AppointmentCard extends StatelessWidget {
     }).catchError((error) {
       print('Failed to update field: $error');
     });
+    Map<String, dynamic> dataNotify = NotificationAlert(
+        message: "Appuntamento confermato per il giorno :"+this.appointment.date.toString(),
+        date: DateTime.now(),
+        toUser: this.appointment.createdBy,
+        id: "id",
+        fromUser: this.appointment.idUser,
+        appId: '')
+        .toJson();
+    FirebaseFirestore.instance
+        .collection('Notifications')
+        .add(dataNotify)
+        .then((DocumentReference documentRef) {
+      // Get the generated document ID
+      String documentId = documentRef.id;
+      // Update the document with the ID
+      documentRef.update({'id': documentId}).then((_) {
+        print('Document added with ID: $documentId');
+      }).catchError((error) {
+        print('Failed to update document with ID: $documentId');
+      });
+    }).catchError((error) {
+      print('Failed to add document: $error');
+    });
   }
+
 
   void deleteAppointment(String documentId) {
     FirebaseFirestore.instance
         .collection('Appointments')
         .doc(documentId)
         .delete();
+    Map<String, dynamic> dataNotify = NotificationAlert(
+        message: "Appuntamento cancellatoò per il giorno :"+this.appointment.date.toString(),
+        date: DateTime.now(),
+        toUser: this.appointment.createdBy,
+        id: "id",
+        fromUser: this.appointment.idUser,
+        appId: '')
+        .toJson();
+    FirebaseFirestore.instance
+        .collection('Notifications')
+        .add(dataNotify)
+        .then((DocumentReference documentRef) {
+      // Get the generated document ID
+      String documentId = documentRef.id;
+      // Update the document with the ID
+      documentRef.update({'id': documentId}).then((_) {
+        print('Document added with ID: $documentId');
+      }).catchError((error) {
+        print('Failed to update document with ID: $documentId');
+      });
+    }).catchError((error) {
+      print('Failed to add document: $error');
+    });
   }
 
   Widget confimation(UserAppointment appointment) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
-    if (appointment.createdBy != _auth.currentUser!.uid)
+    if (appointment.createdBy != _auth.currentUser!.email)
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [

@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:google_places_flutter/model/place_details.dart';
 import 'package:google_places_flutter/model/prediction.dart';
 import 'package:rent_house/models/houseModel.dart';
-import 'package:rent_house/models/notificationAlert.dart';
 import 'package:rent_house/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -16,15 +15,18 @@ import 'package:flutter_spinbox/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 
-class AddNewHouseForRent extends StatefulWidget {
+class ModifyHouseForRent extends StatefulWidget {
+  House house;
+  ModifyHouseForRent({required this.house});
   @override
-  _AddNewHouseForRentState createState() => _AddNewHouseForRentState();
+  _ModifyHouseForRentState createState() => _ModifyHouseForRentState();
 }
 
-class _AddNewHouseForRentState extends State<AddNewHouseForRent> {
+class _ModifyHouseForRentState extends State<ModifyHouseForRent> {
   File? _imageFile;
 
   List<File?> _imagesFile = List<File?>.filled(8, null);
+  List<String> _imagesSaved = [];
   final _kGoogleKey = "AIzaSyBKE6fl0CgsYCabdeT5DPP5EZZxB5_DGYY";
   final picker = ImagePicker();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -49,6 +51,32 @@ class _AddNewHouseForRentState extends State<AddNewHouseForRent> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
 
+
+  @override
+  void initState() {
+    super.initState();
+    print("###########################"+this.widget.house.photos.toString());
+    _titoloController.text=this.widget.house.titolo;
+    _addressController.text=this.widget.house.address;
+    _descriptionController.text=this.widget.house.description;
+    _priceController.text= this.widget.house.prezzo.toString();
+    _kitckenController=this.widget.house.houseComponent['kitchen']!.toInt();
+    _bathroomController=this.widget.house.houseComponent['bathroom']!.toInt();
+    _bedroomController=this.widget.house.houseComponent['bedroom']!.toInt();
+     selectedStudent = this.widget.house.rentTo['student']!;
+     selectedWorker = this.widget.house.rentTo['worker']!;
+     selectedFamily = this.widget.house.rentTo['family']!;
+     _imagesSaved=this.widget.house.photos;
+  }
+
+  @override
+  void dispose() {
+    _addressController.dispose();
+    _priceController.dispose();
+    _titoloController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
   placesAutoCompleteTextField() {
     return Container(
       //padding: EdgeInsets.symmetric(horizontal: 20),
@@ -102,17 +130,12 @@ class _AddNewHouseForRentState extends State<AddNewHouseForRent> {
         photos.add(base64Encode(imageBytes));
       }
     }
-    DocumentReference newDocRef = _firestore.collection('Houses').doc();
-    String docId = newDocRef.id;
-    print("Nuovo Annuncio:" +
-        docId +
-        " pubblicato da: " +
-        _auth.currentUser!.displayName.toString());
-
-    print(_kitckenController);
-    print(_bedroomController);
-    Map<String, dynamic> data = House(
-            idDocument: docId,
+    photos.addAll(_imagesSaved);
+    print("Modifica annuncio:" +
+        this.widget.house.idDocument);
+    _firestore.collection('Houses').doc(this.widget.house.idDocument).update(
+        House(
+            idDocument: this.widget.house.idDocument,
             titolo: _titoloController.text,
             houseComponent: {
               'bathroom': _bathroomController,
@@ -131,24 +154,11 @@ class _AddNewHouseForRentState extends State<AddNewHouseForRent> {
             photos: photos,
             description: _descriptionController.text,
             agentId: _auth.currentUser!.uid,
-            city: _city)
-        .toJson();
-    newDocRef.set(data);
+            city: _city).toJson()
+    ).then((value) => print("Aggiornato con success"));
+
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _addressController.dispose();
-    _priceController.dispose();
-    _titoloController.dispose();
-    _descriptionController.dispose();
-    super.dispose();
-  }
 
 
   @override
@@ -375,8 +385,8 @@ class _AddNewHouseForRentState extends State<AddNewHouseForRent> {
                             style: secondaryTitle,
                           ),
                           Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              //mainAxisSize: MainAxisSize.max,
+                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SwitchListTile(
                                   //tileColor: Colors.yellow[50],
@@ -415,9 +425,53 @@ class _AddNewHouseForRentState extends State<AddNewHouseForRent> {
                                   },
                                 ),
                               ]
-                              //Text('Seleziona l\'orario'),
-                              ),
+                            //Text('Seleziona l\'orario'),
+                          ),
                           SizedBox(height: 30),
+                          Text("Foto caricate: ",style: secondaryTitle,),
+                          Container(
+                              height: 180,
+                              //width: 250,
+                              //onPressed: _selectTime,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _imagesSaved.length,
+                                itemBuilder: (context, index) {
+                                  if (_imagesSaved[index] != "") {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                8),
+                                            child: Container(
+                                              height: 109,
+                                              child:
+                                              Image.memory(
+                                                base64Decode(_imagesSaved[index]),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                          TextButton(onPressed: () =>
+                                          {
+                                            setState(() {
+                                              _imagesSaved[index] = "";
+                                            })
+                                          },
+                                              child: Text("Elimina")
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                  else
+                                    return Container();
+                                }
+                              )),
                           Text(
                             "Carica immagine ( 8 max ) :",
                             style: secondaryTitle,

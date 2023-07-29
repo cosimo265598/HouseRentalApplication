@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 stream: readHouse(),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.hasError)
-                    return Text("Error conncetion to DB");
+                    return Container();
                   else if (snapshot.hasData) {
                     final house = snapshot.data;
                     //replicateData();

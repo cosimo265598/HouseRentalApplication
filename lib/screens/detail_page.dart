@@ -127,7 +127,8 @@ class DetailPage extends StatelessWidget {
         FloatingActionButton.extended(
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (_) => AppointmentScreen(toUser: _userRegistered.email, titolo: houseSelected.titolo)));
+                MaterialPageRoute(builder: (_) => AppointmentScreen(toUser: _userRegistered.email, titolo: houseSelected.titolo
+                )));
           },
           backgroundColor: purpleColor,
           extendedIconLabelSpacing: 20,

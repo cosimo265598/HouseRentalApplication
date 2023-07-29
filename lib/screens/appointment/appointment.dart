@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rent_house/models/appointmentModel.dart';
+import 'package:rent_house/models/notificationAlert.dart';
 import 'package:rent_house/theme.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -18,7 +19,10 @@ class AppointmentScreen extends StatefulWidget {
 
 class _AppointmentScreenState extends State<AppointmentScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   String myId = FirebaseAuth.instance.currentUser!.uid;
+  String name = FirebaseAuth.instance.currentUser!.displayName!;
+  String email = FirebaseAuth.instance.currentUser!.email!;
   DateTime _selectedDate = DateTime.now();
 
   //TimeOfDay _selectedTime = TimeOfDay.now();
@@ -45,11 +49,40 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
             date: DateTime(_selectedDate.year, _selectedDate.month,
                 _selectedDate.day, h, m),
             titolo: this.widget.titolo,
-            createdBy: myId)
+            createdBy: email)
         .toJson();
+
+    String idApp="";
     _firestore
         .collection('Appointments')
         .add(data)
+        .then((DocumentReference documentRef) {
+      // Get the generated document ID
+      String documentId = documentRef.id;
+      idApp=documentId;
+      // Update the document with the ID
+      documentRef.update({'id': documentId}).then((_) {
+        print('Document added with ID: $documentId');
+      }).catchError((error) {
+        print('Failed to update document with ID: $documentId');
+      });
+    }).catchError((error) {
+      print('Failed to add document: $error');
+    });
+
+    Map<String, dynamic> dataNotify = NotificationAlert(
+        message: "Appuntamento ricevuto per il giorno :"+data['date'].toString()+ " da: "+
+            name+ " con email: "+email,
+        date: DateTime.now(),
+        toUser: this.widget.toUser,
+        id: "id",
+        fromUser: email,
+        appId: idApp,
+    )
+        .toJson();
+    _firestore
+        .collection('Notifications')
+        .add(dataNotify)
         .then((DocumentReference documentRef) {
       // Get the generated document ID
       String documentId = documentRef.id;
@@ -62,7 +95,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     }).catchError((error) {
       print('Failed to add document: $error');
     });
-    ;
   }
 
   void _onSelectDate(DateTime day, DateTime focusDay) {

@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../models/houseModel.dart';
 import '../screens/detail_page.dart';
@@ -18,41 +19,43 @@ class PreviewCard extends StatelessWidget {
     if(house.photos.isNotEmpty)
       return Image.memory(
         base64Decode(house.photos[0]),
-        width: 90,
-        height: 100,
-        fit: BoxFit.fill,
+        width: 120,
+        height: 150,
+        fit: BoxFit.cover,
       );
 
     return  Image.asset(
         "assets/images/noimage.png",
-        width: 90,
-        height: 100,
-        fit: BoxFit.fill,
+        width: 120,
+        height: 150,
+        fit: BoxFit.cover,
       );
   }
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Material(
-        elevation: 15,
-        shadowColor: shadowColor,
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
+      child: Container(
+          //width: MediaQuery.of(context).size.width,
           //height: 170,
-          padding: EdgeInsets.all(10),
+          //padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            color: Colors.white38,
+            borderRadius: BorderRadius.circular(20.0),
+            color: Colors.grey.withAlpha(20),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+          child:
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Stack(
+                  Flexible(flex: 1,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        bottomLeft: Radius.circular(20.0),
+                      ),
+                      child: checkImage()
+                  ),),
+                  /*Stack(
                       children: [
                         ClipRRect(
                             borderRadius: BorderRadius.circular(6),
@@ -77,24 +80,64 @@ class PreviewCard extends StatelessWidget {
                           ),
                         ),
                       ]
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
+                  ),*/
+                  SizedBox(width: 15),
+                  Flexible(
+                    flex: 2,
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             house.titolo,
-                            style: contentTitle,
+                            style: secondaryTitle,
 
                           ),
                           SizedBox(
                             height: 2,
                           ),
-                          Text(
-                              house.address,
-                              style: infoText,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Icon(Icons.location_pin,size: 16,),
+                              Expanded(
+                                child: Text(
+                                    house.address,
+                                    style: infoText,
+                                  ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Icon(Icons.calendar_month,size: 16,),
+                              Expanded(
+                                child: Text(
+                                  DateFormat('dd-MM-yyyy HH:mm').format(house.pubDate).toString(),
+                                  style: infoText,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Icon(Icons.euro,size: 16,),
+                              Expanded(
+                                child: Text(
+                                  house.prezzo.truncateToDouble().toString(),
+                                  style: sectionSecondaryTitle,
+                                ),
+                              ),
+                            ],
+                          ),
                           SizedBox(
                             height: 8,
                           ),
@@ -107,9 +150,9 @@ class PreviewCard extends StatelessWidget {
                               );
                             }).toList(),
                           ),*/
-                          SizedBox(
+                          /*SizedBox(
                             height: 8,
-                          ),
+                          ),*/
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             mainAxisSize: MainAxisSize.min,
@@ -120,7 +163,7 @@ class PreviewCard extends StatelessWidget {
                                   height: 20,
                                   width: 40,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[200],
+                                    color: Colors.grey[400],
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Row(
@@ -143,7 +186,7 @@ class PreviewCard extends StatelessWidget {
                                   height: 20,
                                   width: 40,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[200],
+                                    color: Colors.grey[400],
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Row(
@@ -166,7 +209,7 @@ class PreviewCard extends StatelessWidget {
                                   height: 20,
                                   width: 40,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[200],
+                                    color: Colors.grey[400],
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Row(
@@ -201,7 +244,7 @@ class PreviewCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
+              /*Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -210,11 +253,10 @@ class PreviewCard extends StatelessWidget {
                     style: infoText,
                   ),
                 ],
-              ),
-            ],
-          ),
+              ),*/
+
         ),
-      ),
+
     );
   }
 }

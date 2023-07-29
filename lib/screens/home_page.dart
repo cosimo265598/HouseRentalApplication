@@ -14,7 +14,7 @@ import 'package:rent_house/screens/search_screen.dart';
 import 'package:rent_house/theme.dart';
 import 'package:rent_house/widgets/bottom_nav_bar.dart';
 import 'package:rent_house/widgets/top_bar.dart';
-
+import 'package:google_nav_bar/google_nav_bar.dart';
 import '../widgets/around_card.dart';
 import '../widgets/filter_categories.dart';
 import '../widgets/slide_card.dart';
@@ -51,7 +51,32 @@ class _HomeScreenState extends State<HomePage> {
           ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: onSelectedIndexFloatingActionButton(currentIndex),
-      bottomNavigationBar: CurvedNavigationBar(
+      bottomNavigationBar: GNav(
+        rippleColor: Colors.blueGrey, // tab button ripple color when pressed
+        backgroundColor: Colors.grey.withAlpha(30),
+        haptic: true, // haptic feedback
+        gap: 8, // the tab button gap between icon and text
+        color: Colors.grey[800], // unselected icon color
+        activeColor: purpleColor, // selected icon and text color
+        iconSize: 24, // tab button icon size
+        tabBackgroundColor: purpleColor.withOpacity(0.1), // selected tab background color
+        //padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+
+        onTabChange: (index){
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        tabs: const [
+        GButton(icon: Icons.home, text: "Home",),
+        GButton(icon: Icons.search, text: "Cerca",),
+        GButton(icon: Icons.notifications, text: "Notification",),
+        GButton(icon: Icons.account_circle_rounded, text: "Profilo",),
+      ],
+
+      )
+
+      /*CurvedNavigationBar(
         buttonBackgroundColor: purpleColor,
         index: currentIndex,
         color: Colors.grey.shade200,
@@ -65,10 +90,10 @@ class _HomeScreenState extends State<HomePage> {
             FontAwesomeIcons.search,
           ),
           FaIcon(
-            FontAwesomeIcons.heartCircleCheck,
+            FontAwesomeIcons.bell,
           ),
           FaIcon(
-            FontAwesomeIcons.solidCircleUser,
+            FontAwesomeIcons.circleUser,
           )
         ],
         backgroundColor: Colors.transparent,
@@ -77,7 +102,7 @@ class _HomeScreenState extends State<HomePage> {
             currentIndex = index;
           });
         },
-      ),
+      ),*/
     );
   }
 

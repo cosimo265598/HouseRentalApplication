@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:rent_house/models/appointmentModel.dart';
 import 'package:rent_house/screens/appointment/appointmentCard.dart';
 import 'package:rent_house/screens/create_house/add_new_house_for_rent.dart';
+import 'package:rent_house/screens/create_house/modify_house_for_rent.dart';
 import 'package:rent_house/screens/detail_page.dart';
 import 'package:rent_house/theme.dart';
 import 'package:rent_house/widgets/around_card.dart';
@@ -80,12 +81,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
       PreviewCard(
         house: h,
       ),
-      TextButton(
-          onPressed: () {
-            _showDeleteConfirmationDialog(context,h);
-          },
-          child: Text('Delete'),
-        ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          TextButton(
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => ModifyHouseForRent(house: h,)));
+              },
+              child: Text('Modifica'),
+            ),
+          TextButton(
+            onPressed: () {
+              _showDeleteConfirmationDialog(context,h);
+            },
+            child: Text('Elimina'),
+          ),
+        ],
+      ),
     ],
   );
 
