@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../models/houseModel.dart';
+import '../utils/utility.dart';
 import '../screens/detail_page.dart';
 import '../theme.dart';
 
@@ -55,32 +56,6 @@ class PreviewCard extends StatelessWidget {
                       ),
                       child: checkImage()
                   ),),
-                  /*Stack(
-                      children: [
-                        ClipRRect(
-                            borderRadius: BorderRadius.circular(6),
-                            child: checkImage()
-                        ),
-                        Positioned(
-                          top: -8,
-                          left: -8,
-                          child: MaterialButton(
-                            onPressed: () { },
-                            minWidth: 30,
-                            height: 30,
-                            padding: EdgeInsets.all(5),
-                            color: Colors.white.withOpacity(0.8),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Icon(
-                              Icons.bookmark,
-                              size: 14,
-                            ),
-                          ),
-                        ),
-                      ]
-                  ),*/
                   SizedBox(width: 15),
                   Flexible(
                     flex: 2,
@@ -91,7 +66,6 @@ class PreviewCard extends StatelessWidget {
                           Text(
                             house.titolo,
                             style: secondaryTitle,
-
                           ),
                           SizedBox(
                             height: 2,
@@ -117,7 +91,7 @@ class PreviewCard extends StatelessWidget {
                               Icon(Icons.calendar_month,size: 16,),
                               Expanded(
                                 child: Text(
-                                  DateFormat('dd-MM-yyyy HH:mm').format(house.pubDate).toString(),
+                                  Utility.convertDateToStringReadable(house.pubDate),
                                   style: infoText,
                                 ),
                               ),
@@ -244,17 +218,6 @@ class PreviewCard extends StatelessWidget {
                   ),
                 ],
               ),
-              /*Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "Updated: 31/12/56",
-                    style: infoText,
-                  ),
-                ],
-              ),*/
-
         ),
 
     );

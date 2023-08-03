@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rent_house/models/appointmentModel.dart';
+import 'package:rent_house/utils/utility.dart';
 
 import '../../models/notificationAlert.dart';
 import '../../theme.dart';
@@ -16,39 +17,27 @@ class AppointmentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Material(
-          elevation: 10,
-          shadowColor: shadowColor,
-          borderRadius: BorderRadius.circular(14),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            //height: 170,
-            padding: EdgeInsets.all(20),
+      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+      child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              color: whiteColor,
+              borderRadius: BorderRadius.circular(20.0),
+              color: Colors.grey.withAlpha(20),
             ),
-            child: Row(
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
+            child:
                 Expanded(
                   child: ListTile(
                     title: Text(appointment.titolo),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(appointment.date.year.toString()+"/"+appointment.date.month.toString()+"/"+appointment.date.day.toString()+" "+appointment.date.hour.toString()+":"+appointment.date.minute.toString()),
+                        Text(Utility.convertDateToStringReadable(appointment.date)),
                         Text(appointment.idUser)
                       ],
                     ),
+                    trailing: confimation(appointment),
                   ),
                 ),
-                confimation(appointment)
-              ],
-            ),
-          )),
+          ),
     );
   }
 
@@ -62,7 +51,7 @@ class AppointmentCard extends StatelessWidget {
       print('Failed to update field: $error');
     });
     Map<String, dynamic> dataNotify = NotificationAlert(
-        message: "Appuntamento confermato per il giorno :"+this.appointment.date.toString(),
+        message: "Appuntamento confermato per il giorno: "+Utility.convertDateToStringReadable(this.appointment.date),
         date: DateTime.now(),
         toUser: this.appointment.createdBy,
         id: "id",
@@ -93,7 +82,7 @@ class AppointmentCard extends StatelessWidget {
         .doc(documentId)
         .delete();
     Map<String, dynamic> dataNotify = NotificationAlert(
-        message: "Appuntamento cancellatoò per il giorno :"+this.appointment.date.toString(),
+        message: "Appuntamento cancellato per il giorno: "+Utility.convertDateToStringReadable(this.appointment.date),
         date: DateTime.now(),
         toUser: this.appointment.createdBy,
         id: "id",
@@ -129,9 +118,9 @@ class AppointmentCard extends StatelessWidget {
       );
     else {
       if (appointment.confirmed)
-        return Icon(Icons.domain_verification_outlined);
+        return Icon(Icons.domain_verification_outlined, color: Colors.lightGreen,);
       else
-        return Icon(Icons.pending_actions_outlined);
+        return Icon(Icons.pending_actions_outlined, color: Colors.amber);
     }
   }
 

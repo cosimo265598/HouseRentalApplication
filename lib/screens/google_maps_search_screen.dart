@@ -20,10 +20,13 @@ class GoogleMapsScreenState extends State<GoogleMapsScreen> {
 
   Completer<GoogleMapController> _controller = Completer();
   late GoogleMapController _mapController;
-  LocationData currentLocation = LocationData.fromMap({
+  /*LocationData currentLocation = LocationData.fromMap({
     "latitude": 45.4642, // Milan latitude
     "longitude": 9.1900, // Milan longitude
-  });
+  });*/
+  LocationData? currentLocation;
+  Location location = Location();
+
   List<DocumentSnapshot> _documents = [];
 
   @override
@@ -45,7 +48,7 @@ class GoogleMapsScreenState extends State<GoogleMapsScreen> {
   }
 
   Future<void> _getCurrentLocation() async {
-    Location location = Location();
+    //Location location = Location();
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
 
@@ -67,12 +70,10 @@ class GoogleMapsScreenState extends State<GoogleMapsScreen> {
     }
     // Retrieve the current device location
 
-    location.onLocationChanged.listen((LocationData locationData) {
-      setState(() {
+    LocationData? locationData = await location.getLocation();
+    setState(() {
         currentLocation = locationData;
-      });
     });
-
   }
 
   double zoomVal = 5.0;
@@ -81,6 +82,7 @@ class GoogleMapsScreenState extends State<GoogleMapsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
+
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -275,14 +277,22 @@ class GoogleMapsScreenState extends State<GoogleMapsScreen> {
     //LatLng initialCameraPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
     // if (initialCameraPosition!=null)
     //  initialCameraPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+    LatLng initialCameraPosition = currentLocation != null
+        ? LatLng(currentLocation!.latitude!, currentLocation!.longitude!)
+        : LatLng(45.4642, 9.1900); // Milan latitude and longitude
 
     return Expanded(
         child: GoogleMap(
             mapType: MapType.normal,
-            initialCameraPosition: CameraPosition(
+            initialCameraPosition:
+            CameraPosition(
+              target: initialCameraPosition,
+              zoom: 12,
+            ),
+            /*CameraPosition(
                 target: LatLng(
                     currentLocation.latitude!, currentLocation.longitude!),
-                zoom: 12),
+                zoom: 12),*/
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
             },

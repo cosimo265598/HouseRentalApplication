@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:rent_house/theme.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:rent_house/models/notificationAlert.dart';
+import '../utils/utility.dart';
 
 class BookmarkedScreen extends StatefulWidget {
   const BookmarkedScreen({Key? key}) : super(key: key);
@@ -18,8 +20,9 @@ class _BookmarkedScreenState extends State<BookmarkedScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Stream<List<NotificationAlert>> readNotificationUser() =>
-      _firestore.collection('Notifications').where('toUser',isEqualTo: _auth.currentUser!.email)
-          //.orderBy('date', descending: true)
+      _firestore.collection('Notifications')
+          .where('toUser',isEqualTo: _auth.currentUser!.email)
+          .orderBy('date',descending: true)
           .snapshots().map((snap) =>
           snap.docs.map((doc) =>
               NotificationAlert.fromJson(doc.data()))
@@ -48,7 +51,7 @@ class _BookmarkedScreenState extends State<BookmarkedScreen> {
                 stream: readNotificationUser(),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.hasError)
-                    return Text("Error conncetion to DB");
+                    return Text(snapshot.error.toString());
                   else if (snapshot.hasData) {
                     final notify = snapshot.data;
                     //replicateData();
@@ -81,7 +84,7 @@ class _BookmarkedScreenState extends State<BookmarkedScreen> {
               SlidableAction(
                 // An action can be bigger than the others.
                 autoClose: true,
-                flex: 3,
+                flex: 2,
                 onPressed: (value) {
                   deleteNotificationUser(h);
                 },
@@ -93,9 +96,9 @@ class _BookmarkedScreenState extends State<BookmarkedScreen> {
             ],
           ),
           child: ListTile(
-            leading: Icon(Icons.notification_important_outlined, size: 40),
-            title: Text(h.message,style: secondaryTitle,),
-            subtitle: Text( DateFormat('yyyy-MM-dd HH:mm').format(h.date).toString(),style: infoSecondaryTitle,),
+            leading: Icon(Icons.notifications_active_outlined, size: 30),
+            title: Text(h.message,style: contentTitle,),
+            subtitle: Text( Utility.convertDateToStringReadable(h.date),style: infoSecondaryTitle,),
             trailing: Icon(Icons.arrow_back, size: 20),
           )
       );

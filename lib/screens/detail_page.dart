@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:rent_house/screens/appointment/appointment.dart';
 import 'package:rent_house/screens/chat/chat_room.dart';
 import 'package:rent_house/theme.dart';
+import 'package:rent_house/utils/utility.dart';
 
 import '../models/houseModel.dart';
 import '../models/user.dart';
@@ -43,53 +44,47 @@ class DetailPage extends StatelessWidget {
         } else if (snapshot.hasData) {
           UserRegistered userRegistered = snapshot.data!;
           _userRegistered = snapshot.data!;
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: NetworkImage(userRegistered.photoUrl),
-                    fit: BoxFit.cover,
-                  ),
+          return Container(
+            //width: MediaQuery.of(context).size.width,
+            //height: 170,
+            //padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              color: Colors.grey.withAlpha(20),
+            ),
+            child: ListTile(
+            leading: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: NetworkImage(userRegistered.photoUrl),
+                  fit: BoxFit.cover,
                 ),
-                width: 50,
-                height: 50,
               ),
-              SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    userRegistered.displayName,
-                    style: contentTitle,
-                  ),
-                  Text(
-                    "House Owner",
-                    style: infoText,
-                  ),
-                ],
+              width: 50,
+              height: 50,
+            ),
+              title: Text(
+                userRegistered.displayName,
+                style: contentTitle,
               ),
-              Spacer(),
-              Row(
-                children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Icon(
-                      Icons.phone,
-                      color: purpleColor,
-                      size: 40,
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      shape: CircleBorder(),
-                      backgroundColor: Colors.deepPurple.shade100,
-                    ),
-                  ),
-                ],
+              subtitle: Text(
+                "Proprietario",
+                style: infoText,
               ),
-            ],
+              trailing: ElevatedButton(
+                onPressed: () {},
+                child: Icon(
+                  Icons.phone,
+                  color: purpleColor,
+                  size: 40,
+                ),
+                style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(),
+                  backgroundColor: Colors.deepPurple.shade100,
+                ),
+              ),
+            )
           );
         } else {
           // Handle the case when the user is not found
@@ -156,7 +151,6 @@ class DetailPage extends StatelessWidget {
   }
   List<Widget> returnPhotos(House h){
     List<Widget> photosOfAppartment =[];
-
     for (String p in h.photos){
       photosOfAppartment.add(Row(
         children: [
@@ -257,17 +251,12 @@ class DetailPage extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Text(
-                                        houseSelected.prezzo.toString(),
+                                        "€ "+houseSelected.prezzo.toString(),
                                         overflow: TextOverflow.fade,
                                         style: primaryTitle,
                                       ),
                                       Text(
-                                        houseSelected.pubDate.day.toString() +
-                                            "/" +
-                                            houseSelected.pubDate.month
-                                                .toString() +
-                                            "/" +
-                                            houseSelected.pubDate.year.toString(),
+                                        Utility.convertDateToStringReadable(houseSelected.pubDate),
                                         overflow: TextOverflow.fade,
                                         style: infoSecondaryTitle,
                                       ),
@@ -532,7 +521,7 @@ class DetailPage extends StatelessWidget {
                           ),
                           SizedBox(height: 10),
                           Container(
-                            height: 250,
+                            height: 300,
                             padding: EdgeInsets.only(bottom: 5),
                             child: ListView(
                               scrollDirection: Axis.horizontal,
@@ -540,7 +529,7 @@ class DetailPage extends StatelessWidget {
                                 returnPhotos(houseSelected),
                             ),
                           ),
-                          SizedBox(height: 80),
+                          SizedBox(height: 60),
                         ],
                       ),
                     ),
@@ -582,23 +571,23 @@ class _FacilityCardState extends State<FacilityCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 5,
-      shadowColor: shadowColor,
-      borderRadius: BorderRadius.circular(12),
-      child: ClipRRect(
+    return  ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: Container(
-          width: 300,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30.0),
+            color: Colors.grey.withAlpha(20),
+          ),
+          width: 400,
           //height: 200,
-          color: whiteColor,
+          //color: whiteColor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                Image.memory(
-                base64Decode(widget.imageUrl),
-                  //height: 100,
-              ),
+              Image.memory(
+                  base64Decode(widget.imageUrl),
+                    //height: 100,
+                ),
               SizedBox(height: 9),
               Center(
                 child: Text(
@@ -609,7 +598,7 @@ class _FacilityCardState extends State<FacilityCard> {
             ],
           ),
         ),
-      ),
+
     );
   }
 }

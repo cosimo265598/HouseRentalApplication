@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rent_house/theme.dart';
 
 
 class TopBar extends StatefulWidget {
@@ -21,13 +22,13 @@ class _TopBarState extends State<TopBar> {
           horizontal: 8.0,
           vertical: 8.0,
         ),
-        child: IconButton(
+        child: Text("APPLICATION",style: TextStyle(color: purpleColor),)/*IconButton(
           onPressed: () {},
           icon: Image.asset(
             "assets/images/menu_icon.png",
             width: 18,
           ),
-        ),
+        ),*/
       ),
       actions: [
         Padding(

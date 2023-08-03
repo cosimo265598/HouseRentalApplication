@@ -6,6 +6,7 @@ import 'package:rent_house/theme.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:rent_house/utils/utility.dart';
 
 class AppointmentScreen extends StatefulWidget {
   String toUser;
@@ -71,7 +72,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     });
 
     Map<String, dynamic> dataNotify = NotificationAlert(
-        message: "Appuntamento ricevuto per il giorno :"+data['date'].toString()+ " da: "+
+        message: "Appuntamento ricevuto per il giorno :"+Utility.convertDateToStringReadable(data['date'])+ " da: "+
             name+ " con email: "+email,
         date: DateTime.now(),
         toUser: this.widget.toUser,
@@ -103,17 +104,17 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     });
   }
 
-  /*void _selectTime() {
+  void _selectTime() {
     DatePicker.showTimePicker(
       context,
       showSecondsColumn: false,
       onConfirm: (time) {
         setState(() {
-          _selectedTime = DateTime.now() as TimeOfDay;
+          //_selectedTime = DateTime.now() as TimeOfDay;
         });
       },
     );
-  }*/
+  }
 
   void _showBottomPop() {
     showModalBottomSheet(
@@ -151,68 +152,37 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          TextButton(
-                            style: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              // Text color
-                              backgroundColor:
-                                  MaterialStateProperty.all<Color>(purpleColor),
-                              // Button background color
-                              textStyle: MaterialStateProperty.all<TextStyle>(
-                                TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold), // Text style
-                              ),
-                              padding:
-                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                EdgeInsets.symmetric(
-                                    vertical: 12.0,
-                                    horizontal: 24.0), // Padding
-                              ),
-                              shape: MaterialStateProperty.all<OutlinedBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        8.0)), // Button shape
-                              ),
-                            ),
+                          ElevatedButton(
+                            child: Text("Yes",style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold
+                            )),
                             onPressed: () {
                               addAppointmentToCollection();
                               Navigator.of(context).pop();
                               Navigator.of(context).pop();
                             },
-                            child: Text('Yes'),
-                          ),
-                          TextButton(
                             style: ButtonStyle(
                               foregroundColor: MaterialStateProperty.all<Color>(
                                   Colors.white),
                               // Text color
-                              backgroundColor:
-                                  MaterialStateProperty.all<Color>(purpleColor),
-                              // Button background color
-                              textStyle: MaterialStateProperty.all<TextStyle>(
-                                TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold), // Text style
-                              ),
-                              padding:
-                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                EdgeInsets.symmetric(
-                                    vertical: 12.0,
-                                    horizontal: 24.0), // Padding
-                              ),
-                              shape: MaterialStateProperty.all<OutlinedBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        8.0)), // Button shape
-                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(purpleColor),
                             ),
+                          ),
+                          ElevatedButton(
+                            child: Text("No",style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold
+                            )),
                             onPressed: () {
-                              // Cancel or dismiss the confirmation dialog
                               Navigator.of(context).pop();
                             },
-                            child: Text('No'),
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              // Text color
+                              backgroundColor: MaterialStateProperty.all<Color>(purpleColor),
+                            ),
                           ),
                         ],
                       )
@@ -232,70 +202,78 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Seleziona la data e l\'orario dell\'appuntamento'),
+        title: Text('Pianifica appuntamento'),
       ),
-      body: SingleChildScrollView(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TableCalendar(
-                headerStyle: HeaderStyle(formatButtonVisible: false),
-                calendarFormat: CalendarFormat.month,
-                availableGestures: AvailableGestures.all,
-                selectedDayPredicate: (day) => isSameDay(day, _selectedDate),
-                onDaySelected: _onSelectDate,
-                focusedDay: _selectedDate,
-                firstDay: DateTime.now(),
-                lastDay: DateTime.utc(2030, 3, 14)),
-            SizedBox(height: 20),
-            Text(
-              "Seleziona un orario disponibile",
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-                height: 180,
-                //onPressed: _selectTime,
-                child: GridView.builder(
-                  itemCount: availableTimes.length,
-                  itemBuilder: (context, index) {
-                    return ElevatedButton(
-                      child: Text(availableTimes[index]),
-                      onPressed: () {
-                        setState(() {
-                          _selectedAvailableTime = index;
-                        });
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: _selectedAvailableTime == index
-                            ? MaterialStateProperty.all<Color>(purpleColor)
-                            : MaterialStateProperty.all<Color>(Colors.blueGrey),
-                      ),
-                    );
-                  },
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5, // Numero di colonne desiderate
-                    crossAxisSpacing:
-                        8.0, // Spaziatura orizzontale tra i pulsanti
-                    mainAxisSpacing: 8.0, // Spaziatura verticale tra i pulsanti
+              TableCalendar(
+                  headerStyle: HeaderStyle(formatButtonVisible: false),
+                  calendarFormat: CalendarFormat.month,
+                  availableGestures: AvailableGestures.all,
+                  selectedDayPredicate: (day) => isSameDay(day, _selectedDate),
+                  onDaySelected: _onSelectDate,
+                  focusedDay: _selectedDate,
+                  firstDay: DateTime.now(),
+                  lastDay: DateTime.utc(2030, 3, 14)),
+              SizedBox(height: 20),
+              Text(
+                "Seleziona un orario disponibile: ",
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                  height: 180,
+                  //onPressed: _selectTime,
+                  child: ListView.builder(
+                    itemCount: availableTimes.length,
+                    itemBuilder: (context, index) {
+                      return ElevatedButton(
+                          child: Text(availableTimes[index]),
+                          onPressed: () {
+                            setState(() {
+                              _selectedAvailableTime = index;
+                            });
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: _selectedAvailableTime == index
+                                ? MaterialStateProperty.all<Color>(purpleColor)
+                                : MaterialStateProperty.all<Color>(Colors.blueGrey),
+                          ),
+                        );
+
+                    },
+                    /*gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 5, // Numero di colonne desiderate
+                      crossAxisSpacing:
+                          8.0, // Spaziatura orizzontale tra i pulsanti
+                      mainAxisSpacing: 8.0, // Spaziatura verticale tra i pulsanti
+                    ),*/
+                  )
+                  //Text('Seleziona l\'orario'),
                   ),
-                )
-                //Text('Seleziona l\'orario'),
-                ),
-            SizedBox(
-              height: 50,
-              width: 250,
-              child: ElevatedButton(
-                child: Text("Conferma prenotazione"),
+              SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
                 onPressed: () {
                   _showBottomPop();
                 },
+                style: ElevatedButton.styleFrom(
+                  primary: purpleColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                child: Text("Conferma prenotazione", style: TextStyle(
+                  fontSize: 16
+                ),),
               ),
-            ),
-          ],
+            ],
         ),
       ),
     );
