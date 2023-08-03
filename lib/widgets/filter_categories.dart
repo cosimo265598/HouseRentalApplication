@@ -11,7 +11,7 @@ class Categories extends StatefulWidget {
 
 class _CategoriesState extends State<Categories> {
   int selectedCategoryIndex = 0;
-  List<String> categoryList = ["filtro1","firltro2","filtro3","filtro1","firltro2","filtro3","filtro1","firltro2","filtro3"];
+  List<String> categoryList = ["Torino","Milano"];
 
   @override
   Widget build(BuildContext context) {

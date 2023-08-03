@@ -26,6 +26,16 @@ class _HomeScreenState extends State<HomeScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
@@ -44,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(
-              "Recently added",
+              "Aggiunti di recente:",
               style: secondaryTitle,
             ),
           ),
@@ -58,11 +68,37 @@ class _HomeScreenState extends State<HomeScreen> {
                   else if (snapshot.hasData) {
                     final house = snapshot.data;
                     //replicateData();
-                    return ListView(
-                      padding: EdgeInsets.only(bottom: 10),
-                      scrollDirection: Axis.horizontal,
-                      children: house!.map(buildExample).toList(),
-                    );
+                    if (snapshot.data!.isNotEmpty) {
+                      return Column(
+                        children: [
+                          ListView(
+                            padding: EdgeInsets.only(bottom: 10),
+                            scrollDirection: Axis.horizontal,
+                            children: house!.map(buildExample).toList(),
+                          ),
+                        ],
+                      );
+                    } else
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.sentiment_dissatisfied,
+                              size: 60,
+                              color: Colors.amber,
+                            ),
+                            SizedBox(height: 16),
+                            Text(
+                              "Non sono presenti annunci negli ultimi "+RECENT.toString()+" giorni",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
                   } else {
                     return Center(child: CircularProgressIndicator());
                   }
@@ -71,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(
-              "Around To You",
+              "Catalogo",
               style: secondaryTitle,
             ),
           ),
@@ -87,13 +123,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Stream<List<House>> readHouse() => FirebaseFirestore.instance
       .collection('Houses')
-      .where('pubDate', isGreaterThan: DateTime.now().subtract(const Duration(days: RECENT)))
+      .where('pubDate',
+          isGreaterThan: DateTime.now().subtract(const Duration(days: RECENT)))
       .orderBy('pubDate', descending: true)
       .limit(10)
       .snapshots()
-      .map((snap) => snap.docs
-          .map((doc) => House.fromJson(doc.data()))
-          .toList());
+      .map((snap) =>
+          snap.docs.map((doc) => House.fromJson(doc.data())).toList());
 
   Widget buildExample(House h) => Row(children: [
         SizedBox(width: 30),
